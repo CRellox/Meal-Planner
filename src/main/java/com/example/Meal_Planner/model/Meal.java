@@ -29,8 +29,5 @@ public class Meal {
     private String ingredients;
 
     private Integer prepTime;
-
-
-
 }
 
