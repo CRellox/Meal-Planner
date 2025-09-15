@@ -1,6 +1,7 @@
 package com.example.Meal_Planner.dto;
 
 import com.example.Meal_Planner.core.enums.MealType;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,4 +22,9 @@ public class MealReadOnlyDTO {
     private String prepTime;
     private Long id;
     private MealType mealType;
+
+    public MealReadOnlyDTO(LocalDateTime createdAt, LocalDateTime updatedAt,
+                           @NotBlank(message = "Η ονομασία είναι υποχρεωτική.") String name,
+                           String ingredients, Long id, MealType mealType, Integer prepTime) {
+    }
 }
