@@ -1,5 +1,6 @@
 package com.example.Meal_Planner.dto;
 
+import com.example.Meal_Planner.core.enums.MealType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -24,5 +25,5 @@ public class MealInsertDTO {
     private String prepTime;
 
     @NotNull(message = "Ο τύπος δεν μπορεί να είναι null.")
-    private String mealType;
+    private MealType mealType;
 }
