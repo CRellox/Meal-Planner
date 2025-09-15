@@ -35,9 +35,9 @@ public class    MealController {
         return "redirect:/meals";
     }
 
-    @PostMapping("/delete")
+    @GetMapping("/delete")
     public String deleteMeal(@ModelAttribute long id) {
         mealRepository.deleteById(id);
-        return  "redirect:/meals";
+        return "redirect:/meals";
     }
 }
