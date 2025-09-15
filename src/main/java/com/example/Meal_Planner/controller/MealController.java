@@ -5,14 +5,11 @@ import com.example.Meal_Planner.model.Meal;
 import com.example.Meal_Planner.repository.MealRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/meals")
-public class MealController {
+public class    MealController {
 
     private final MealRepository mealRepository;
 
@@ -36,5 +33,11 @@ public class MealController {
     public String saveMeal(@ModelAttribute Meal meal) {
         mealRepository.save(meal);
         return "redirect:/meals";
+    }
+
+    @PostMapping("/delete")
+    public String deleteMeal(@ModelAttribute long id) {
+        mealRepository.deleteById(id);
+        return  "redirect:/meals";
     }
 }
