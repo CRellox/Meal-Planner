@@ -16,9 +16,6 @@ import lombok.Setter;
 @Entity
 public class Meal {
 
-    private String ingredients;
-    private Integer prepTime;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +25,10 @@ public class Meal {
 
     @Enumerated(EnumType.STRING)
     private MealType mealType;
+
+    private String ingredients;
+
+    private Integer prepTime;
 
 
 
