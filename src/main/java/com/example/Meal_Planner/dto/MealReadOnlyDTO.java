@@ -1,0 +1,24 @@
+package com.example.Meal_Planner.dto;
+
+import com.example.Meal_Planner.core.enums.MealType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class MealReadOnlyDTO {
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String name;
+    private String ingredients;
+    private String prepTime;
+    private Long id;
+    private MealType mealType;
+}
