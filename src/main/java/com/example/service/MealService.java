@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.Meal_Planner.core.enums.MealType;
 import com.example.Meal_Planner.model.Meal;
 import com.example.Meal_Planner.repository.MealRepository;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class MealService {
 
     public List<Meal> findMealByName(String name) {
         return mealRepository.findByMealName(name);
+    }
+
+    public List<Meal> findMealByType(MealType mealType) {
+        return mealRepository.findByMealType(mealType);
     }
 
     public Meal saveMeal(Meal meal) {
