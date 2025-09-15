@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class MealInsertDTO {
+public class MealEditDTO {
 
     @NotNull(message = "Το όνομα δεν μπορεί να είναι null.")
     @Size(min = 2)
