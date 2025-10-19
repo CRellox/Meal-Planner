@@ -1,31 +1,33 @@
-package com.example.service;
+package com.example.Meal_Planner.service;
 
 import com.example.Meal_Planner.core.enums.MealType;
 import com.example.Meal_Planner.model.Meal;
 import com.example.Meal_Planner.repository.MealRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MealService {
 
     private final MealRepository mealRepository;
 
-    public MealService(MealRepository mealRepository) {
-        this.mealRepository = mealRepository;
-    }
-
-    public List<Meal> getAllMeals() {
+    public List <Meal> getAllMeals() {
         return mealRepository.findAll();
     }
 
-    public List<Meal> findMealByName(String name) {
-        return mealRepository.findByMealName(name);
+    public List <Meal> findMealByType(MealType mealType) {
+        return mealRepository.findByMealType(mealType);
     }
 
-    public List<Meal> findMealByType(MealType mealType) {
-        return mealRepository.findByMealType(mealType);
+    public void findById(Long id) {
+        mealRepository.findById(id);
+    }
+
+    public List <Meal> findByIngredients(String ingredients) {
+        return mealRepository.findByIngredients(ingredients);
     }
 
     public Meal saveMeal(Meal meal) {
