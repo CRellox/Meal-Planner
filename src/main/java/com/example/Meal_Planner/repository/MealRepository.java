@@ -14,5 +14,5 @@ import java.util.Optional;
 public interface MealRepository extends JpaRepository<Meal, Long>, JpaSpecificationExecutor<Meal> {
 
     List<Meal> findByMealType(MealType mealType);
-    Optional<Meal> findByMealById(Long id);
+    Optional<Meal> findById(String id);
 }
