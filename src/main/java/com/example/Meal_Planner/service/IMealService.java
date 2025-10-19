@@ -10,5 +10,5 @@ public interface IMealService {
 
     void updateMeal(MealEditDTO mealEditDTO);
 
-    void deleteMealById(String Id);
+    void deleteMealById(Long id);
 }
