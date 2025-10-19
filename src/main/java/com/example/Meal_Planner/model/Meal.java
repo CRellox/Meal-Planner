@@ -11,39 +11,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
+
 @AllArgsConstructor
-@Getter
+@NoArgsConstructor
 @Setter
+@Getter
 @Entity
-public class Meal extends AbstractEntity {
+@Table(name = "meals")
+public class Meal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(min = 2)
     @NotBlank(message = "Η ονομασία είναι υποχρεωτική.")
     private String name;
 
+    @NotNull(message = "Ο τύπος δεν μπορεί να είναι null.")
     @Enumerated(EnumType.STRING)
     private MealType mealType;
 
+    @NotNull(message = "Τα συστατικά δεν μπορούν να είναι null.")
+    @Size(min = 2)
     private String ingredients;
 
-    private Integer prepTime;
-
-    public Meal(Object id, @NotNull(message = "Το όνομα δεν μπορεί να είναι null.")
-                           @Size(min = 2)
-                           String name,
-
-                           @NotNull(message = "Τα συστατικά δεν μπορούν να είναι null.")
-                           @Size(min = 2)
-                           String ingredients,
-
-                           String prepTime,
-
-                           @NotNull(message = "Ο τύπος δεν μπορεί να είναι null.")
-                           MealType mealType) {
-    }
+    private Long prepTime;
 }
 
