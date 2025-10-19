@@ -22,7 +22,7 @@ public class MealEditDTO {
     @Size(min = 2)
     private String ingredients;
 
-    private String prepTime;
+    private Long prepTime;
 
     @NotNull(message = "Ο τύπος δεν μπορεί να είναι null.")
     private MealType mealType;
