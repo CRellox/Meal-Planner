@@ -1,6 +1,7 @@
 package com.example.Meal_Planner.service;
 
-import com.example.Meal_Planner.core.enums.MealType;
+import com.example.Meal_Planner.dto.MealEditDTO;
+import com.example.Meal_Planner.dto.MealInsertDTO;
 import com.example.Meal_Planner.mapper.Mapper;
 import com.example.Meal_Planner.model.Meal;
 import com.example.Meal_Planner.repository.MealRepository;
@@ -8,37 +9,41 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MealService {
+public class MealService implements IMealService {
 
     private final MealRepository mealRepository;
     private final Mapper mapper;
 
-    public List <Meal> getAllMeals() {
-        return mealRepository.findAll();
+    @Override
+    public Meal saveMeal(MealInsertDTO dto) {
+        Meal meal = mapper.mapToMealEntity(dto);
+        mealRepository.save(meal);
+        log.info("Meal with id={} saved.", dto.getId());
+        return meal;
     }
 
-    public List <Meal> findMealByType(MealType mealType) {
-        return mealRepository.findByMealType(mealType);
+    @Override
+    public void updateMeal(MealEditDTO dto) {
     }
 
-    public void findById(Long id) {
-        mealRepository.findById(id);
+    @Override
+    public void deleteMealById(Long id) {
     }
 
-    public List <Meal> findByIngredients(String ingredients) {
-        return mealRepository.findByIngredients(ingredients);
-    }
 
-    public Meal saveMeal(Meal meal) {
-        return mealRepository.save(meal);
-    }
-
-    public void deleteMeal(Long id) {
-        mealRepository.deleteById(id);
-    }
+//    public List <Meal> getAllMeals() {
+//        return mealRepository.findAll();
+//    }
+//
+//    public List <Meal> findMealByType(MealType mealType) {
+//        return mealRepository.findByMealType(mealType);
+//    }
+//
+//    public List <Meal> findByIngredients(String ingredients) {
+//        return mealRepository.findByIngredients(ingredients);
+//    }
 }
