@@ -1,7 +1,6 @@
 package com.example.Meal_Planner.dto;
 
 import com.example.Meal_Planner.core.enums.MealType;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -11,8 +10,8 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 public class MealEditDTO {
 
     @NotNull(message = "Το όνομα δεν μπορεί να είναι null.")
@@ -28,7 +27,6 @@ public class MealEditDTO {
     @NotNull(message = "Ο τύπος δεν μπορεί να είναι null.")
     private MealType mealType;
 
-    public MealEditDTO(@NotBlank(message = "Η ονομασία είναι υποχρεωτική.") String name, String ingredients,
-                       MealType mealType, Integer prepTime) {
-    }
+    @NotNull
+    private Long Id;
 }
