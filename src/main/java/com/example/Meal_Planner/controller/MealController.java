@@ -16,10 +16,10 @@ public class MealController {
     private final MealRepository mealRepository;
 
 
-    @GetMapping
+    @GetMapping("/main")
     public String listMeals(Model model) {
         model.addAttribute("meals", mealRepository.findAll());
-        return "meals/list";
+        return "meals/main";
     }
 
     @GetMapping("/new")
@@ -31,12 +31,12 @@ public class MealController {
     @PostMapping("/save")
     public String saveMeal(@ModelAttribute Meal meal) {
         mealRepository.save(meal);
-        return "redirect:/meals";
+        return "redirect:/meals/main";
     }
 
     @GetMapping("/delete")
     public String deleteMeal(@ModelAttribute long id) {
         mealRepository.deleteById(id);
-        return "redirect:/meals";
+        return "redirect:/meals/main";
     }
 }
