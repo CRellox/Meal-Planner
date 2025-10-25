@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Προσθήκη Νέου Γεύματος - Διαχείριση Γευμάτων</title>
+    <title>Add New Meal - Meal Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style>
@@ -38,168 +38,224 @@
             display: inline-flex;
             align-items: center;
         }
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-right">
 
 <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-25 mb-5">
-        <div class="container">
-            <a th:href="@{/meals/main}"
-               class="navbar-brand fw-bold">
-                <i class="bi bi-egg-fried me-2">Meal Planner</i>
-            </a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-25 mb-5">
+    <div class="container">
+        <a th:href="@{/meals/main}"
+           class="navbar-brand fw-bold">
+            <i class="bi bi-egg-fried me-2">Meal Planner</i>
+        </a>
 
-            <button class="navbar-toggler"
-                    type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav">
+        <button class="navbar-toggler"
+                type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
 
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse"
-                 id="navbarNav">
+        <div class="collapse navbar-collapse"
+             id="navbarNav">
 
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a th:href="@{/meals/main}"
-                           class="btn btn-outline-light btn-lg px-4 me-2">
-                            <i class="bi bi-arrow-left me-2">Πίσω</i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a th:href="@{/meals/main}"
+                       class="btn btn-outline-light btn-lg px-4 me-2">
+                        <i class="bi bi-arrow-left me-2">Back</i>
+                    </a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
 <!-- Main Content -->
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
 
-                <!-- Header Section -->
-                <div class="text-center mb-5">
-                    <div class="form-icon">
-                        <i class="bi bi-plus-lg text-white fs-4"></i>
-                    </div>
-
-                    <h1 class="display-5 text-white fw-bold mb-3">Προσθήκη Νέου Γεύματος</h1>
-                    <p class="lead text-white-50">Συμπληρώστε τις πληροφορίες για το νέο σας γεύμα</p>
+            <!-- Header Section -->
+            <div class="text-center mb-5">
+                <div class="form-icon">
+                    <i class="bi bi-plus-lg text-white fs-4"></i>
                 </div>
 
-                <!-- Form Card -->
-                <div class="card shadow-lg border-0 meal-card">
-                    <div class="card-header bg-white py-4">
-                        <h3 class="h4 mb-0 text-primary text-center">
-                            <i class="bi bi-pencil-square me-2">Στοιχεία Γεύματος</i>
-                        </h3>
-                    </div>
+                <h1 class="display-5 text-white fw-bold mb-3">Add New Meal</h1>
+                <p class="lead text-white-50">Fill in the information for your new meal</p>
+            </div>
 
-                    <div class="card-body p-4 p-md-5">
-                        <form th:action="@{/meals/new}"
-                              th:object="${mealInsertDTO}"
-                              method="post">
+            <!-- Form Card -->
+            <div class="card shadow-lg border-0 meal-card">
+                <div class="card-header bg-white py-4">
+                    <h3 class="h4 mb-0 text-primary text-center">
+                        <i class="bi bi-pencil-square me-2">Meal Details</i>
+                    </h3>
+                </div>
 
-                            <!-- Meal Name -->
-                            <div class="mb-4">
-                                <label for="name"
-                                       class="form-label fw-bold text-primary">
-                                    <i class="bi bi-card-heading me-2">Όνομα Γεύματος</i>
-                                </label>
-                                <input type="text"
-                                       class="form-control form-control-lg"
-                                       id="name"
-                                       th:field="*{name}"
-                                       placeholder="Π.χ. Μουσακάς, Παστίτσιο..."
-                                       required>
-                                <div class="form-text">Δώστε ένα περιγραφικό όνομα για το γεύμα σας</div>
+                <div class="card-body p-4 p-md-5">
+                    <form th:action="@{/meals/new}"
+                          th:object="${mealInsertDTO}"
+                          method="post">
+
+                        <!-- Meal Name -->
+                        <div class="mb-4">
+                            <label for="name"
+                                   class="form-label fw-bold text-primary">
+                                <i class="bi bi-card-heading me-2">Meal Name</i>
+                            </label>
+                            <input type="text"
+                                   class="form-control form-control-lg"
+                                   id="name"
+                                   th:field="*{name}"
+                                   placeholder="e.g., Moussaka, Pastitsio..."
+                                   required>
+                            <div class="form-text">Give a descriptive name for your meal</div>
+                        </div>
+
+                        <!-- Meal Type -->
+                        <div class="mb-4">
+                            <label for="mealType"
+                                   class="form-label fw-bold text-primary">
+                                <i class="bi bi-tag me-2">Meal Type</i>
+                            </label>
+                            <select class="form-select form-select-lg"
+                                    id="mealType"
+                                    th:field="*{mealType}"
+                                    required>
+                                <option value="" disabled selected>Select meal type...</option>
+                                <option value="BREAKFAST">Breakfast</option>
+                                <option value="LUNCH">Lunch</option>
+                                <option value="DINNER">Dinner</option>
+                                <option value="SNACK">Snack</option>
+                                <!--<option value="DESSERT">Dessert</option>-->
+                            </select>
+                        </div>
+
+                        <!-- Ingredients -->
+                        <div class="mb-4">
+                            <label for="ingredients"
+                                   class="form-label fw-bold text-primary">
+                                <i class="bi bi-basket me-2">Ingredients</i>
+                            </label>
+                            <textarea class="form-control"
+                                      id="ingredients"
+                                      th:field="*{ingredients}"
+                                      rows="4"
+                                      placeholder="Write the meal ingredients, separated by commas..."
+                                      required></textarea>
+                            <div class="form-text">Separate ingredients with commas
+                                (e.g., Tomatoes, onions, olive oil)
                             </div>
 
-                            <!-- Meal Type -->
-                            <div class="mb-4">
-                                <label for="mealType"
-                                       class="form-label fw-bold text-primary">
-                                    <i class="bi bi-tag me-2">Τύπος Γεύματος</i>
-                                </label>
-                                <select class="form-select form-select-lg"
-                                        id="mealType"
-                                        th:field="*{mealType}"
-                                        required>
-                                    <option value="" disabled selected>Επιλέξτε τύπο γεύματος...</option>
-                                    <option value="BREAKFAST">Πρωινό</option>
-                                    <option value="LUNCH">Μεσημεριανό</option>
-                                    <option value="DINNER">Βραδινό</option>
-                                    <option value="SNACK">Σνακ</option>
-<!--                                    <option value="Sweet">Επιδόρπιο</option>-->
-                                </select>
+                            <!-- Example Tags -->
+                            <div class="mt-3">
+                                <small class="text-muted fw-bold">Example ingredients:</small>
+                                <div class="d-flex flex-wrap mt-2">
+                                    <span class="ingredient-tag">Tomatoes</span>
+                                    <span class="ingredient-tag">Onions</span>
+                                    <span class="ingredient-tag">Olive oil</span>
+                                    <span class="ingredient-tag">Salt</span>
+                                    <span class="ingredient-tag">Pepper</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recipe Instructions -->
+                        <div class="mb-4">
+                            <label for="instructions"
+                                   class="form-label fw-bold text-primary">
+                                <i class="bi bi-list-check me-2">Recipe Instructions</i>
+                            </label>
+                            <textarea class="form-control"
+                                      id="instructions"
+                                      th:field="*{instructions}"
+                                      rows="6"
+                                      placeholder="Write step-by-step instructions for preparing the meal...
+                                        Example:
+                                        1. First, chop the vegetables...
+                                        2. Then, heat the oil in a pan...
+                                        3. Add the ingredients and cook for 10 minutes..."
+                                      required></textarea>
+                            <div class="form-text">Write clear, step-by-step instructions for preparing the meal.
+                                Use numbers or bullet points for each step.
                             </div>
 
-                            <!-- Ingredients -->
-                            <div class="mb-4">
-                                <label for="ingredients"
-                                       class="form-label fw-bold text-primary">
-                                    <i class="bi bi-basket me-2">Συστατικά</i>
-                                </label>
-                                <textarea class="form-control"
-                                          id="ingredients"
-                                          th:field="*{ingredients}"
-                                          rows="4"
-                                          placeholder="Γράψτε τα συστατικά του γεύματος, χωρισμένα με κόμμα..."
-                                          required></textarea>
-                                <div class="form-text">Χωρίστε τα συστατικά με κόμμα (π.χ. Ντομάτες, κρεμμύδια, ελαιόλαδο)</div>
-
-                                <!-- Example Tags -->
-                                <div class="mt-3">
-                                    <small class="text-muted fw-bold">Παραδείγματα συστατικών:</small>
-                                    <div class="d-flex flex-wrap mt-2">
-                                        <span class="ingredient-tag">Nτομάτες</span>
-                                        <span class="ingredient-tag">Κρεμμύδια</span>
-                                        <span class="ingredient-tag">Ελαιόλαδο</span>
-                                        <span class="ingredient-tag">Αλάτι</span>
-                                        <span class="ingredient-tag">Πιπέρι</span>
+                            <!-- Example Steps -->
+                            <div class="mt-3">
+                                <small class="text-muted fw-bold">Example steps:</small>
+                                <div class="card mt-2">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start mb-2">
+                                            <div class="step-number">1</div>
+                                            <div>Chop all vegetables and prepare ingredients</div>
+                                        </div>
+                                        <div class="d-flex align-items-start mb-2">
+                                            <div class="step-number">2</div>
+                                            <div>Heat oil in a large pan over medium heat</div>
+                                        </div>
+                                        <div class="d-flex align-items-start">
+                                            <div class="step-number">3</div>
+                                            <div>Cook for 15-20 minutes until golden brown</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Prep Time -->
-                            <div class="mb-4">
-                                <label for="prepTime" class="form-label fw-bold text-primary">
-                                    <i class="bi bi-clock me-2"></i>Χρόνος Προετοιμασίας (λεπτά)
-                                </label>
-                                <div class="input-group">
-                                    <input type="number"
-                                           class="form-control form-control-lg"
-                                           id="prepTime"
-                                           th:field="*{prepTime}"
-                                           min="1"
-                                           max="480"
-                                           placeholder="30"
-                                           required>
-                                    <span class="input-group-text">λεπτά</span>
-                                </div>
-                                <div class="form-text">Ο χρόνος που απαιτείται για την προετοιμασία του γεύματος</div>
+                        <!-- Prep Time -->
+                        <div class="mb-4">
+                            <label for="prepTime" class="form-label fw-bold text-primary">
+                                <i class="bi bi-clock me-2"></i>Preparation Time (minutes)
+                            </label>
+                            <div class="input-group">
+                                <input type="number"
+                                       class="form-control form-control-lg"
+                                       id="prepTime"
+                                       th:field="*{prepTime}"
+                                       min="1"
+                                       max="480"
+                                       placeholder="30"
+                                       required>
+                                <span class="input-group-text">minutes</span>
                             </div>
+                            <div class="form-text">The time required to prepare the meal</div>
+                        </div>
 
-                            <!-- Form Buttons -->
-                            <div class="row mt-5">
-                                <div class="col-6">
-                                    <a th:href="@{/meals/main}"
-                                       class="btn btn-outline-secondary btn-lg w-100">
-                                        <i class="bi bi-x-circle me-2">Ακύρωση</i>
-                                    </a>
-                                </div>
-                                <div class="col-6">
-                                    <button type="submit"
-                                            class="btn btn-primary btn-lg w-100">
-                                        <i class="bi bi-check-circle me-2">Αποθήκευση</i>
-                                    </button>
-                                </div>
+                        <!-- Form Buttons -->
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <a th:href="@{/meals/main}"
+                                   class="btn btn-outline-secondary btn-lg w-100">
+                                    <i class="bi bi-x-circle me-2">Cancel</i>
+                                </a>
                             </div>
-                        </form>
-                    </div>
+                            <div class="col-6">
+                                <button type="submit"
+                                        class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-check-circle me-2">Save</i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 </div>
 
 <!-- Footer -->
@@ -225,6 +281,20 @@
                 .join(', ');
 
             this.value = ingredients;
+        });
+
+        // Auto-format instructions with step numbers
+        const instructionsInput = document.getElementById('instructions');
+
+        instructionsInput.addEventListener('blur', function() {
+            // Format instructions to ensure each step is on a new line
+            let instructions = this.value
+                .split('\n')
+                .map(step => step.trim())
+                .filter(step => step.length > 0)
+                .join('\n');
+
+            this.value = instructions;
         });
     });
 </script>
