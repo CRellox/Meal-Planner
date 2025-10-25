@@ -26,6 +26,14 @@
         font-size: 0.9rem;
         padding: 0.5rem 1rem;
     }
+    .instructions-preview {
+        max-height: 80px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        line-height: 1.4;
+    }
 </style>
 
 <!-- Nav Bar -->
@@ -143,6 +151,9 @@
                         <th class="py-3">
                             <i class="bi bi-basket me-2"> Ingredients</i>
                         </th>
+                        <th class="py-3">
+                            <i class="bi bi-list-check me-2"> Instructions</i>
+                        </th>
                         <th class="pe-4 py-3 text-end">
                             <i class="bi bi-alarm me-2"> Preparation Time</i>
                         </th>
@@ -165,17 +176,22 @@
                             </div>
                         </td>
                         <td>
-                                    <span class="badge fs-6 px-3 py-2"
-                                          th:classappend="${meal.mealType == 'BREAKFAST'} ? 'bg-primary' :
-                                                            (${meal.mealType == 'LUNCH'} ? 'bg-success' :
-                                                            (${meal.mealType == 'DINNER'} ? 'bg-danger' : 'bg-warning'))"
-                                          th:text="${meal.mealType}">
-                                    </span>
+                            <div th:switch="${meal.mealType.name()}">
+                                <span th:case="'BREAKFAST'" class="badge fs-6 px-3 py-2 bg-primary">BREAKFAST</span>
+                                <span th:case="'LUNCH'" class="badge fs-6 px-3 py-2 bg-success">LUNCH</span>
+                                <span th:case="'DINNER'" class="badge fs-6 px-3 py-2 bg-danger">DINNER</span>
+                                <span th:case="*" class="badge fs-6 px-3 py-2 bg-warning" th:text="${meal.mealType}"></span>
+                            </div>
                         </td>
                         <td>
                             <p class="mb-0"
                                th:text="${meal.ingredients}">
                             </p>
+                        </td>
+                        <td>
+                            <div class="instructions-preview text-muted"
+                                 th:text="${meal.instructions}">
+                            </div>
                         </td>
                         <td class="pe-4 text-end">
                                     <span class="badge bg-light text-dark prep-time-badge">
