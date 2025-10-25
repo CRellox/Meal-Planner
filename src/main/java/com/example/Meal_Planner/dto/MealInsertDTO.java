@@ -30,4 +30,7 @@ public class MealInsertDTO {
 
     @NotNull
     private Long Id;
+
+    @NotNull
+    private String instructions;
 }

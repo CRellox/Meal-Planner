@@ -37,5 +37,8 @@ public class Meal {
     private String ingredients;
 
     private Long prepTime;
+
+    @NotNull
+    private String instructions;
 }
 

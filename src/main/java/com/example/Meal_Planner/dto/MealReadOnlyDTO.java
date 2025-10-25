@@ -16,4 +16,5 @@ public class MealReadOnlyDTO {
     private Long prepTime;
     private Long id;
     private MealType mealType;
+    private String instructions;
 }

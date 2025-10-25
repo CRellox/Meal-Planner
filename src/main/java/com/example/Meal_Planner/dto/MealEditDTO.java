@@ -29,4 +29,7 @@ public class MealEditDTO {
 
     @NotNull
     private Long Id;
+
+    @NotNull
+    private String instructions;
 }
