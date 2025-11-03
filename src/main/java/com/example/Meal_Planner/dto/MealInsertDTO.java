@@ -14,6 +14,9 @@ import lombok.Setter;
 @Getter
 public class MealInsertDTO {
 
+    @NotNull(message = "Ο τύπος δεν μπορεί να είναι null.")
+    private MealType mealType;
+
     @NotNull(message = "Το όνομα δεν μπορεί να είναι null.")
     @Size(min = 2)
     private String name;
@@ -23,14 +26,11 @@ public class MealInsertDTO {
     private String ingredients;
 
     @NotNull
-    private Long prepTime;
-
-    @NotNull(message = "Ο τύπος δεν μπορεί να είναι null.")
-    private MealType mealType;
-
-    @NotNull
-    private Long Id;
+    private String prepTime;
 
     @NotNull
     private String instructions;
+
+    @NotNull
+    private Long Id;
 }

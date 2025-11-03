@@ -24,19 +24,23 @@ public class Meal extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min = 2)
-    @NotBlank(message = "Η ονομασία είναι υποχρεωτική.")
-    private String name;
+    @Column(unique = true)
+    private String uuid;
 
     @NotNull(message = "Ο τύπος δεν μπορεί να είναι null.")
     @Enumerated(EnumType.STRING)
     private MealType mealType;
 
+    @Size(min = 2)
+    @NotBlank(message = "Η ονομασία είναι υποχρεωτική.")
+    private String name;
+
     @NotNull(message = "Τα συστατικά δεν μπορούν να είναι null.")
     @Size(min = 2)
     private String ingredients;
 
-    private Long prepTime;
+    @NotNull
+    private String prepTime;
 
     @NotNull
     private String instructions;

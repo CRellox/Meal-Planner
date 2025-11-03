@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -13,8 +15,11 @@ import lombok.Setter;
 public class MealReadOnlyDTO {
     private String name;
     private String ingredients;
-    private Long prepTime;
+    private String prepTime;
+    private String instructions;
+    private String uuid;
     private Long id;
     private MealType mealType;
-    private String instructions;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

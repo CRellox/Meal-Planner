@@ -10,17 +10,18 @@ import org.springframework.stereotype.Component;
 public class Mapper {
 
     public Meal mapToMealEntity(MealInsertDTO dto) {
-        return new Meal(dto.getId(), dto.getName(), dto.getMealType(),
+        return new Meal(null, null, dto.getMealType(), dto.getName(),
                 dto.getIngredients(), dto.getPrepTime(), dto.getInstructions());
     }
 
     public MealReadOnlyDTO mapToMealReadOnlyDTO(Meal meal) {
-        return new MealReadOnlyDTO(meal.getName(), meal.getIngredients(),
-                meal.getPrepTime(), meal.getId(), meal.getMealType(), meal.getInstructions());
+        return new MealReadOnlyDTO(meal.getName(), meal.getIngredients(), meal.getPrepTime(),
+                meal.getInstructions(), meal.getUuid(), meal.getId(), meal.getMealType(),
+                meal.getCreatedAt(), meal.getUpdatedAt());
     }
 
     public MealEditDTO mapToMealEditDTO(Meal meal) {
-        return new MealEditDTO(meal.getName(), meal.getIngredients(),
-                meal.getPrepTime(), meal.getMealType(), meal.getId(), meal.getInstructions());
+        return new MealEditDTO(meal.getMealType(), meal.getId(), meal.getUuid(), meal.getName(), meal.getIngredients(),
+                meal.getPrepTime(), meal.getInstructions());
     }
 }
