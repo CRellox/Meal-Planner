@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "meals")
-public class Meal {
+public class Meal extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
