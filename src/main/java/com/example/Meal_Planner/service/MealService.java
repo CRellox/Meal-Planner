@@ -33,24 +33,4 @@ public class MealService implements IMealService {
     @Override
     public void deleteMealById(Long id) {
     }
-
-    @Override
-    public Meal createMeal(MealInsertDTO dto) {
-        Meal meal = mapper.mapToMealEntity(dto);
-        mealRepository.save(meal);
-        return meal;
-    }
-
-
-//    public List <Meal> getAllMeals() {
-//        return mealRepository.findAll();
-//    }
-//
-//    public List <Meal> findMealByType(MealType mealType) {
-//        return mealRepository.findByMealType(mealType);
-//    }
-//
-//    public List <Meal> findByIngredients(String ingredients) {
-//        return mealRepository.findByIngredients(ingredients);
-//    }
 }
