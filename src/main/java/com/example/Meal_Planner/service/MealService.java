@@ -31,6 +31,7 @@ public class MealService implements IMealService {
     }
 
     @Override
-    public void deleteMealById(Long id) {
+    public void deleteMealByUUID(String uuid) {
+
     }
 }
