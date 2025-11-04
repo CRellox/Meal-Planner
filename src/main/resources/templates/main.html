@@ -39,7 +39,7 @@
 <!-- Nav Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-25 mb-5">
     <div class="container">
-        <a th:href="@{/meals/main}"
+        <a th:href="@{/MealPlanner/main}"
            class="navbar-brand fw-bold">
             <i class="bi bi-egg-fried me-2"> Meal Planner</i>
         </a>
@@ -55,7 +55,7 @@
              id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a th:href="@{/meals/new}"
+                    <a th:href="@{/MealPlanner/meal-form}"
                        class="btn btn-warning btn-lg px-4">
                         <i class="bi bi-plus-circle me-2"> New Meal</i>
                     </a>
@@ -108,7 +108,7 @@
                 <div class="card-body">
                     <h5 class="card-title text-primary">Quick Add</h5>
                     <p class="text-muted">Quickly add a new meal</p>
-                    <a th:href="@{/meals/new}"
+                    <a th:href="@{/MealPlanner/meal-form}"
                        class="btn btn-primary">
                         <i class="bi bi-plus-lg me-1"> Create Meal</i>
                     </a>
@@ -214,7 +214,7 @@
                 <i class="bi bi-egg display-1 text-muted mb-4"></i>
                 <h3 class="h2 text-muted mb-3">No meals found.</h3>
                 <p class="text-muted mb-4">Add your first meal to get started!</p>
-                <a th:href="@{/meals/new}"
+                <a th:href="@{/MealPlanner/meal-form}"
                    class="btn btn-primary btn-lg px-4">
                     <i class="bi bi-plus-circle me-2"> Create First Meal.</i>
                 </a>
