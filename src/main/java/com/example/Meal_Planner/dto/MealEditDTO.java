@@ -32,7 +32,7 @@ public class MealEditDTO {
     private String ingredients;
 
     @NotNull
-    private String prepTime;
+    private Integer prepTime;
 
     @NotNull
     private String instructions;

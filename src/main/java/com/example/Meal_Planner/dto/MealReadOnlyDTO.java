@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class MealReadOnlyDTO {
     private String name;
     private String ingredients;
-    private String prepTime;
+    private Integer prepTime;
     private String instructions;
     private String uuid;
     private Long id;

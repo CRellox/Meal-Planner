@@ -40,7 +40,7 @@ public class Meal extends AbstractEntity {
     private String ingredients;
 
     @NotNull
-    private String prepTime;
+    private Integer prepTime;
 
     @NotNull
     private String instructions;
