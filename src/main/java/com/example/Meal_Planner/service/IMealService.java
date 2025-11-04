@@ -1,5 +1,6 @@
 package com.example.Meal_Planner.service;
 
+import com.example.Meal_Planner.core.exceptions.EntityNotFoundException;
 import com.example.Meal_Planner.dto.MealEditDTO;
 import com.example.Meal_Planner.dto.MealInsertDTO;
 import com.example.Meal_Planner.model.Meal;
@@ -10,5 +11,5 @@ public interface IMealService {
 
     void updateMeal(MealEditDTO mealEditDTO);
 
-    void deleteMealByUUID(String uuid);
+    void deleteMealByUUID(String uuid) throws EntityNotFoundException;
 }
