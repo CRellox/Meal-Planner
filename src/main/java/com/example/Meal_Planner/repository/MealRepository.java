@@ -12,5 +12,6 @@ import java.util.Optional;
 @Repository
 public interface MealRepository extends JpaRepository<Meal, Long>, JpaSpecificationExecutor<Meal> {
 
-    Optional<Meal> FindByUuid(String uuid);
+    Optional<Meal> findByUuid(String uuid);
+    Optional<Meal> findByName(String name);
 }

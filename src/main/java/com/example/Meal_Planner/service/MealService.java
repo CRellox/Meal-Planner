@@ -1,5 +1,6 @@
 package com.example.Meal_Planner.service;
 
+import com.example.Meal_Planner.core.exceptions.EntityAlreadyExistsException;
 import com.example.Meal_Planner.core.exceptions.EntityNotFoundException;
 import com.example.Meal_Planner.dto.MealEditDTO;
 import com.example.Meal_Planner.dto.MealInsertDTO;
@@ -21,11 +22,22 @@ public class MealService implements IMealService {
     private final Mapper mapper;
 
     @Override
-    public Meal saveMeal(MealInsertDTO dto) {
-        Meal meal = mapper.mapToMealEntity(dto);
-        mealRepository.save(meal);
-        log.info("Meal with id={} saved.", dto.getId());
-        return meal;
+    @Transactional(rollbackOn = { EntityAlreadyExistsException.class })
+    public Meal saveMeal(MealInsertDTO dto) throws EntityAlreadyExistsException {
+        try {
+            if (dto.getName() != null && mealRepository.findByName(dto.getName()).isPresent()) {
+                throw new EntityAlreadyExistsException
+                        ("Meal", "This Meal name " + dto.getName() + " already exists");
+            }
+
+            Meal meal = mapper.mapToMealEntity(dto);
+            mealRepository.save(meal);
+            log.info("Meal with id={} saved.", dto.getId());
+            return meal;
+        } catch (EntityAlreadyExistsException e) {
+            log.error("Save failed for Meal with name={}. Meal already exists", dto.getName(), e);
+            throw e;
+        }
     }
 
     @Override
@@ -36,12 +48,10 @@ public class MealService implements IMealService {
     @Transactional(rollbackOn = Exception.class)
     public void deleteMealByUUID(String uuid) throws EntityNotFoundException {
         try {
-            Meal meal = mealRepository.FindByUuid(uuid)
-                            .orElseThrow(() -> new EntityNotFoundException
-                                    ("Meal", "Meal with uuid: " + uuid + " not found"));
+            Meal meal = mealRepository.findByUuid(uuid)
+                    .orElseThrow(() -> new EntityNotFoundException ("Meal", "Meal with uuid: " + uuid + " not found"));
 
             mealRepository.deleteById(meal.getId());
-
             log.info("Meal with uuid={} deleted.", uuid);
         } catch (EntityNotFoundException e) {
             log.error("Delete failed for Meal with uuid={}. Meal not found.", uuid, e);
