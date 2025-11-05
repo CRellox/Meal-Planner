@@ -1,42 +1,51 @@
 package com.example.Meal_Planner.controller;
 
 
+import com.example.Meal_Planner.core.exceptions.EntityNotFoundException;
+import com.example.Meal_Planner.dto.MealInsertDTO;
 import com.example.Meal_Planner.model.Meal;
 import com.example.Meal_Planner.repository.MealRepository;
+import com.example.Meal_Planner.service.MealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/meals")
+@RequestMapping("/MealPlanner")
 @RequiredArgsConstructor
 public class MealController {
 
     private final MealRepository mealRepository;
+    private final MealService mealService;
 
 
-    @GetMapping("/main")
+    @GetMapping("/meal-list")
     public String listMeals(Model model) {
         model.addAttribute("meals", mealRepository.findAll());
-        return "meals/main";
+        return "meal-list";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/meal-form")
     public String showMealForm(Model model) {
-        model.addAttribute("meal", new Meal());
-        return "meals/new";
+        model.addAttribute("mealInsertDTO", new MealInsertDTO());
+        return "meal-form";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/meal-form")
     public String saveMeal(@ModelAttribute Meal meal) {
         mealRepository.save(meal);
-        return "redirect:/meals/main";
+        return "redirect:/MealPlanner/meal-list";
     }
 
-    @GetMapping("/delete")
-    public String deleteMeal(@ModelAttribute long id) {
-        mealRepository.deleteById(id);
-        return "redirect:/meals/main";
+    @GetMapping("/delete/{uuid}")
+    public String deleteMeal(@PathVariable String uuid, Model model) {
+        try {
+            mealService.deleteMealByUUID(uuid);
+            return "redirect:/MealPlanner/meal-list";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "meal-list";
+        }
     }
 }

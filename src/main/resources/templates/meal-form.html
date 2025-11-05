@@ -57,7 +57,7 @@
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-25 mb-5">
     <div class="container">
-        <a th:href="@{/MealPlanner/main}"
+        <a th:href="@{/MealPlanner/meal-list}"
            class="navbar-brand fw-bold">
             <i class="bi bi-egg-fried me-2"> Meal Planner</i>
         </a>
@@ -74,7 +74,7 @@
 
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a th:href="@{/MealPlanner/main}"
+                    <a th:href="@{/MealPlanner/meal-list}"
                        class="btn btn-outline-light btn-lg px-4 me-2">
                         <i class="bi bi-arrow-left me-2">Back</i>
                     </a>
@@ -239,14 +239,14 @@
                         <!-- Form Buttons -->
                         <div class="row mt-5">
                             <div class="col-6">
-                                <a th:href="@{/MealPlanner/main}"
+                                <a th:href="@{/MealPlanner/meal-list}"
                                    class="btn btn-outline-secondary btn-lg w-100">
                                     <i class="bi bi-x-circle me-2">Cancel</i>
                                 </a>
                             </div>
                             <div class="col-6">
                                 <button type="submit"
-                                        th:href="@{/MealPlanner/main}"
+                                        th:href="@{/MealPlanner/meal-list}"
                                         class="btn btn-primary btn-lg w-100">
                                     <i class="bi bi-check-circle me-2">Save</i>
                                 </button>
