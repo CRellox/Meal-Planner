@@ -11,7 +11,7 @@ public interface IMealService {
 
     Meal saveMeal(MealInsertDTO mealInsertDTO) throws EntityAlreadyExistsException;
 
-    void updateMeal(MealEditDTO mealEditDTO);
+    void updateMeal(MealEditDTO mealEditDTO) throws EntityAlreadyExistsException, EntityNotFoundException;
 
     void deleteMealByUUID(String uuid) throws EntityNotFoundException;
 }
