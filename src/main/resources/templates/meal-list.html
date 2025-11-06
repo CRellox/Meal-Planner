@@ -4,37 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/meal-list.css}">
 </head>
 <body class="bg-gradient-to-right">
-<style>
-    .bg-gradient-to-right {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-    }
-    .meal-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: none;
-        border-radius: 15px;
-    }
-    .meal-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    .prep-time-badge {
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-    }
-    .instructions-preview {
-        max-height: 80px;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        line-height: 1.4;
-    }
-</style>
 
 <!-- Nav Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-25 mb-5">
@@ -70,7 +44,7 @@
     <div class="row mb-4">
         <div class="col-12 text-center">
             <h1 class="display-4 text-white fw-bold mb-3">
-                <i class="bi bi-egg-fried me-3"></i>My Meals
+                <i class="bi bi-fork-knife me-2"></i>My Meals
             </h1>
             <p class="lead text-white-50">Manage your favorite meals!</p>
         </div>
@@ -223,12 +197,7 @@
     </div>
 </div>
 
-<!-- Footer -->
-<footer class="bg-dark bg-opacity-25 text-white text-center py-4 mt-5">
-    <div class="container">
-        <p class="mb-0">Copyright © 2025, Meal Planner, Chris Ladas</p>
-    </div>
-</footer>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
