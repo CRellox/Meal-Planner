@@ -1,0 +1,28 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-format ingredients input
+        const ingredientsInput = document.getElementById('ingredients');
+        ingredientsInput.addEventListener('blur', function() {
+            let ingredients = this.value
+                .split(',')
+                .map(ingredient => ingredient.trim())
+                .filter(ingredient => ingredient.length > 0)
+                .join(', ');
+            this.value = ingredients;
+        });
+
+        // Auto-format instructions with step numbers
+        const instructionsInput = document.getElementById('instructions');
+        instructionsInput.addEventListener('blur', function() {
+            let instructions = this.value
+                .split('\n')
+                .map(step => step.trim())
+                .filter(step => step.length > 0)
+                .join('\n');
+            this.value = instructions;
+        });
+    });
+</script>
