@@ -10,89 +10,62 @@
 </head>
 <body class="bg-gradient-to-right">
 
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-25 mb-5">
-    <div class="container">
-        <a th:href="@{/MealPlanner/meal-list}"
-           class="navbar-brand fw-bold">
-            <i class="bi bi-egg-fried me-2"> Meal Planner</i>
-        </a>
-
-        <button class="navbar-toggler"
-                type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse"
-             id="navbarNav">
-
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a th:href="@{/MealPlanner/meal-list}"
-                       class="btn btn-outline-light btn-lg px-4 me-2">
-                        <i class="bi bi-arrow-left me-2">Back</i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <!-- Main Content -->
 <div class="container">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="d-flex justify-content-end">
+                <a th:href="@{/mealplanner/meal/main-menu}"
+                   class="btn btn-primary btn-lg fw-bold shadow-sm bg-gradient">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Menu
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-white fw-bold mb-3">
+                <i class="bi bi-plus-circle me-2"></i>Add New Meal
+            </h1>
+            <p class="lead text-white-50">Fill in the information for your new meal</p>
+        </div>
+    </div>
+
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
-
-            <!-- Header Section -->
-            <div class="text-center mb-5">
-                <div class="form-icon">
-                    <i class="bi bi-plus-lg text-white fs-4"></i>
-                </div>
-
-                <h1 class="display-5 text-white fw-bold mb-3">Add New Meal</h1>
-                <p class="lead text-white-50">Fill in the information for your new meal</p>
-            </div>
 
             <!-- Form Card -->
             <div class="card shadow-lg border-0 meal-card">
                 <div class="card-header bg-white py-4">
                     <h3 class="h4 mb-0 text-primary text-center">
-                        <i class="bi bi-pencil-square me-2">Meal Details</i>
+                        <i class="bi bi-pencil-square me-2"></i>Meal Details
                     </h3>
                 </div>
 
                 <div class="card-body p-4 p-md-5">
-                    <form th:action="@{/MealPlanner/meal-form}"
-                          th:object="${mealInsertDTO}"
-                          method="post">
+                    <form th:action="@{/mealplanner/meal/insert}" th:object="${mealInsertDTO}" method="post">
 
                         <!-- Meal Name -->
                         <div class="mb-4">
-                            <label for="name"
-                                   class="form-label fw-bold text-primary">
-                                <i class="bi bi-card-heading me-2">Meal Name</i>
+                            <label for="name" class="form-label fw-bold text-primary">
+                                <i class="bi bi-card-heading me-2"></i>Meal Name
                             </label>
-                            <input type="text"
-                                   class="form-control form-control-lg"
+                            <input type="text" class="form-control form-control-lg"
                                    id="name"
-                                   th:field="*{name}"
-                                   placeholder="e.g., Moussaka, Pastitsio..."
-                                   required>
+                                   th:field="*{name}" placeholder="e.g., Moussaka, Pastitsio..." required>
                             <div class="form-text">Give a descriptive name for your meal</div>
                         </div>
 
                         <!-- Meal Type -->
                         <div class="mb-4">
-                            <label for="mealType"
-                                   class="form-label fw-bold text-primary">
-                                <i class="bi bi-tag me-2">Meal Type</i>
+                            <label for="mealType" class="form-label fw-bold text-primary">
+                                <i class="bi bi-tag me-2"></i>Meal Type
                             </label>
-                            <select class="form-select form-select-lg"
-                                    id="mealType"
-                                    th:field="*{mealType}"
-                                    required>
+                            <select class="form-select form-select-lg" id="mealType" th:field="*{mealType}" required>
                                 <option value="" disabled selected>Select meal type...</option>
                                 <option value="BREAKFAST">Breakfast</option>
                                 <option value="LUNCH">Lunch</option>
@@ -104,19 +77,16 @@
 
                         <!-- Ingredients -->
                         <div class="mb-4">
-                            <label for="ingredients"
-                                   class="form-label fw-bold text-primary">
-                                <i class="bi bi-basket me-2">Ingredients</i>
+                            <label for="ingredients" class="form-label fw-bold text-primary">
+                                <i class="bi bi-basket me-2"></i>Ingredients
                             </label>
                             <textarea class="form-control"
                                       id="ingredients"
                                       th:field="*{ingredients}"
                                       rows="4"
-                                      placeholder="Write the meal ingredients, separated by commas..."
-                                      required></textarea>
-                            <div class="form-text">Separate ingredients with commas
-                                (e.g., Tomatoes, onions, olive oil)
-                            </div>
+                                      placeholder="Write the meal ingredients, separated by commas..." required></textarea>
+                            <div class="form-text">
+                                Separate ingredients with commas (e.g., Tomatoes, onions, olive oil)</div>
 
                             <!-- Example Tags -->
                             <div class="mt-3">
@@ -133,21 +103,21 @@
 
                         <!-- Recipe Instructions -->
                         <div class="mb-4">
-                            <label for="instructions"
-                                   class="form-label fw-bold text-primary">
-                                <i class="bi bi-list-check me-2">Recipe Instructions</i>
+                            <label for="instructions" class="form-label fw-bold text-primary">
+                                <i class="bi bi-list-check me-2"></i>Recipe Instructions
                             </label>
                             <textarea class="form-control"
-                                      id="instructions"
-                                      th:field="*{instructions}"
+                                      id="instructions" th:field="*{instructions}"
                                       rows="6"
                                       placeholder="Write step-by-step instructions for preparing the meal...
-                                        Example:
-                                        1. First, chop the vegetables...
-                                        2. Then, heat the oil in a pan...
-                                        3. Add the ingredients and cook for 10 minutes..."
+                                            Example:
+                                            1. First, chop the vegetables...
+                                            2. Then, heat the oil in a pan...
+                                            3. Add the ingredients and cook for 10 minutes..."
                                       required></textarea>
-                            <div class="form-text">Write clear, step-by-step instructions for preparing the meal.
+
+                            <div class="form-text">
+                                Write clear, step-by-step instructions for preparing the meal.
                                 Use numbers or bullet points for each step.
                             </div>
 
@@ -183,10 +153,8 @@
                                        class="form-control form-control-lg"
                                        id="prepTime"
                                        th:field="*{prepTime}"
-                                       min="1"
-                                       max="480"
-                                       placeholder="30"
-                                       required>
+                                       min="1" max="480"
+                                       placeholder="30" required>
                                 <span class="input-group-text">minutes</span>
                             </div>
                             <div class="form-text">The time required to prepare the meal</div>
@@ -195,16 +163,14 @@
                         <!-- Form Buttons -->
                         <div class="row mt-5">
                             <div class="col-6">
-                                <a th:href="@{/MealPlanner/meal-list}"
+                                <a th:href="@{/mealplanner/meal/list}"
                                    class="btn btn-outline-secondary btn-lg w-100">
-                                    <i class="bi bi-x-circle me-2">Cancel</i>
+                                    <i class="bi bi-x-circle me-2"></i>Cancel
                                 </a>
                             </div>
                             <div class="col-6">
-                                <button type="submit"
-                                        th:href="@{/MealPlanner/meal-list}"
-                                        class="btn btn-primary btn-lg w-100">
-                                    <i class="bi bi-check-circle me-2">Save</i>
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-check-circle me-2"></i>Save
                                 </button>
                             </div>
                         </div>
@@ -216,6 +182,6 @@
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
-<div th:insert="~{fragments/meal-form-scripts}"></div>
+<div th:insert="~{fragments/scripts/meal-form-scripts}"></div>
 </body>
 </html>
