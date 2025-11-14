@@ -1,0 +1,50 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('#filterButtons button');
+    const mealRows = document.querySelectorAll('.meal-row');
+    const totalMealsCount = document.getElementById('totalMealsCount');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => {
+                btn.classList.remove('btn-primary', 'active');
+                btn.classList.add('btn-outline-primary');
+            });
+
+            // Add active class to clicked button
+            this.classList.remove('btn-outline-primary');
+            this.classList.add('btn-primary', 'active');
+
+            const filterValue = this.getAttribute('data-filter');
+            let visibleCount = 0;
+
+            // Filter meals
+            mealRows.forEach(row => {
+                if (filterValue === 'all') {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    const mealType = row.getAttribute('data-meal-type');
+                    if (mealType === filterValue) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+
+            // Update the visible meals count
+            if (filterValue === 'all') {
+                totalMealsCount.textContent = mealRows.length;
+            } else {
+                totalMealsCount.textContent = visibleCount;
+            }
+        });
+    });
+});
+</script>

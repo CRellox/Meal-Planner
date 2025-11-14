@@ -10,37 +10,21 @@
 </head>
 <body class="bg-gradient-to-right">
 
-<!-- Nav Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-25 mb-5">
-    <div class="container">
-        <a th:href="@{/MealPlanner/meal-list}"
-           class="navbar-brand fw-bold">
-            <i class="bi bi-egg-fried me-2"> Meal Planner</i>
-        </a>
+<div th:replace="~{fragments/header :: header}"></div>
 
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse"
-             id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a th:href="@{/MealPlanner/meal-form}"
-                       class="btn btn-warning btn-lg px-4">
-                        <i class="bi bi-plus-circle me-2"> New Meal</i>
-                    </a>
-                </li>
-            </ul>
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="d-flex justify-content-end">
+                <a th:href="@{/mealplanner/meal/main-menu}"
+                   class="btn btn-primary btn-lg fw-bold shadow-sm bg-gradient">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Menu
+                </a>
+            </div>
         </div>
     </div>
-</nav>
 
-<!-- Main Content -->
-<div class="container">
+    <!-- Header Section -->
     <div class="row mb-4">
         <div class="col-12 text-center">
             <h1 class="display-4 text-white fw-bold mb-3">
@@ -56,8 +40,8 @@
             <div class="card text-white bg-primary meal-card">
                 <div class="card-body text-center">
                     <i class="bi bi-list-ul display-6 mb-2"></i>
-                    <h5 class="card-title">Total Created Meals</h5>
-                    <h2 class="display-6 fw-bold" th:text="${meals.size()}"></h2>
+                    <h5 class="card-title">Total Meals</h5>
+                    <h2 class="display-6 fw-bold" id="totalMealsCount" th:text="${meals.size()}"></h2>
                 </div>
             </div>
         </div>
@@ -66,12 +50,11 @@
             <div class="card text-white bg-success meal-card">
                 <div class="card-body text-center">
                     <i class="bi bi-clock display-6 mb-2"></i>
-                    <h5 class="card-title">Average Preparation Time</h5>
+                    <h5 class="card-title">Avg Prep Time</h5>
                     <h2 class="display-6 fw-bold">
                         <span th:if="${!meals.empty}"
-                              th:text="${#numbers.formatInteger(#aggregates.avg(meals.![prepTime]), 0)} + ' Minutes'">
-                        </span>
-                        <span th:if="${meals.empty}">0 Minutes</span>
+                              th:text="${#numbers.formatInteger(#aggregates.avg(meals.![prepTime]), 0)} + ' min'"></span>
+                        <span th:if="${meals.empty}">0 min</span>
                     </h2>
                 </div>
             </div>
@@ -81,10 +64,9 @@
             <div class="card bg-white meal-card">
                 <div class="card-body">
                     <h5 class="card-title text-primary">Quick Add</h5>
-                    <p class="text-muted">Quickly add a new meal</p>
-                    <a th:href="@{/MealPlanner/meal-form}"
-                       class="btn btn-primary">
-                        <i class="bi bi-plus-lg me-1"> Create Meal</i>
+                    <p class="text-muted">Add a new meal to your collection</p>
+                    <a th:href="@{/mealplanner/meal/insert}" class="btn btn-primary">
+                        <i class="bi bi-plus-lg me-1"></i>Create Meal
                     </a>
                 </div>
             </div>
@@ -97,15 +79,29 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <h3 class="h4 mb-0 text-primary">
-                        <i class="bi bi-table me-2"> Meal List</i>
+                        <i class="bi bi-table me-2"></i>Meal List
                     </h3>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <div class="btn-group">
-                        <button class="btn btn-outline-primary active">All</button>
-                        <button class="btn btn-outline-primary">Breakfast</button>
-                        <button class="btn btn-outline-primary">Lunch</button>
-                        <button class="btn btn-outline-primary">Dinner</button>
+                    <div class="btn-group" id="filterButtons">
+                        <button class="btn btn-primary active" data-filter="all">
+                            All
+                        </button>
+                        <button class="btn btn-outline-primary" data-filter="BREAKFAST">
+                            Breakfast
+                        </button>
+                        <button class="btn btn-outline-primary" data-filter="SNACK">
+                            Snack
+                        </button>
+                        <button class="btn btn-outline-primary" data-filter="LUNCH">
+                            Lunch
+                        </button>
+                        <button class="btn btn-outline-primary" data-filter="DINNER">
+                            Dinner
+                        </button>
+                        <button class="btn btn-outline-primary" data-filter="DESSERT">
+                            Dessert
+                        </button>
                     </div>
                 </div>
             </div>
@@ -116,35 +112,23 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-primary">
                     <tr>
-                        <th class="ps-4 py-3">
-                            <i class="bi bi-arrow-down-up me-2"> Name</i>
-                        </th>
-                        <th class="py-3">
-                            <i class="bi bi-tag me-2"> Type</i>
-                        </th>
-                        <th class="py-3">
-                            <i class="bi bi-basket me-2"> Ingredients</i>
-                        </th>
-                        <th class="py-3">
-                            <i class="bi bi-list-check me-2"> Instructions</i>
-                        </th>
-                        <th class="pe-4 py-3 text-end">
-                            <i class="bi bi-alarm me-2"> Preparation Time</i>
-                        </th>
+                        <th class="ps-4 py-3"><i class="bi bi-arrow-down-up me-2"></i>Name</th>
+                        <th class="py-3"><i class="bi bi-tag me-2"></i>Type</th>
+                        <th class="py-3"><i class="bi bi-basket me-2"></i>Ingredients</th>
+                        <th class="py-3"><i class="bi bi-list-check me-2"></i>Instructions</th>
+                        <th class="pe-4 py-3 text-end"><i class="bi bi-alarm me-2"></i>Prep Time</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr th:each="meal : ${meals}"
-                        class="border-bottom">
+                    <tbody id="mealsTableBody">
+                    <tr th:each="meal : ${meals}" class="border-bottom meal-row"
+                        th:attr="data-meal-type=${meal.mealType.name()}">
                         <td class="ps-4">
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
                                     <i class="bi bi-egg-fried text-primary"></i>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0 fw-bold"
-                                        th:text="${meal.name}">
-                                    </h6>
+                                    <h6 class="mb-0 fw-bold" th:text="${meal.name}"></h6>
                                     <small class="text-muted">Added today</small>
                                 </div>
                             </div>
@@ -154,24 +138,18 @@
                                 <span th:case="'BREAKFAST'" class="badge fs-6 px-3 py-2 bg-primary">BREAKFAST</span>
                                 <span th:case="'LUNCH'" class="badge fs-6 px-3 py-2 bg-success">LUNCH</span>
                                 <span th:case="'DINNER'" class="badge fs-6 px-3 py-2 bg-danger">DINNER</span>
-                                <span th:case="*" class="badge fs-6 px-3 py-2 bg-warning" th:text="${meal.mealType}"></span>
+                                <span th:case="'SNACK'" class="badge fs-6 px-3 py-2 bg-info">SNACK</span>
+                                <span th:case="'DESSERT'" class="badge fs-6 px-3 py-2 bg-warning text-dark">DESSERT</span>
+                                <span th:case="*" class="badge fs-6 px-3 py-2 bg-secondary" th:text="${meal.mealType}"></span>
                             </div>
                         </td>
-                        <td>
-                            <p class="mb-0"
-                               th:text="${meal.ingredients}">
-                            </p>
-                        </td>
-                        <td>
-                            <div class="instructions-preview text-muted"
-                                 th:text="${meal.instructions}">
-                            </div>
-                        </td>
+                        <td><p class="mb-0" th:text="${meal.ingredients}"></p></td>
+                        <td><div class="instructions-preview text-muted" th:text="${meal.instructions}"></div></td>
                         <td class="pe-4 text-end">
-                                    <span class="badge bg-light text-dark prep-time-badge">
-                                        <i class="bi bi-clock me-1"></i>
-                                        <span th:text="${meal.prepTime} + ' minutes'"></span>
-                                    </span>
+                            <span class="badge bg-light text-dark prep-time-badge">
+                                <i class="bi bi-clock me-1"></i>
+                                <span th:text="${meal.prepTime} + ' min'"></span>
+                            </span>
                         </td>
                     </tr>
                     </tbody>
@@ -181,16 +159,14 @@
     </div>
 
     <!-- Empty State -->
-    <div th:if="${meals.empty}"
-         class="text-center py-5">
+    <div th:if="${meals.empty}" class="text-center py-5">
         <div class="card bg-white meal-card py-5">
             <div class="card-body">
                 <i class="bi bi-egg display-1 text-muted mb-4"></i>
-                <h3 class="h2 text-muted mb-3">No meals found.</h3>
-                <p class="text-muted mb-4">Add your first meal to get started!</p>
-                <a th:href="@{/MealPlanner/meal-form}"
-                   class="btn btn-primary btn-lg px-4">
-                    <i class="bi bi-plus-circle me-2"> Create First Meal.</i>
+                <h3 class="h2 text-muted mb-3">No meals found</h3>
+                <p class="text-muted mb-4">Start by adding your first meal!</p>
+                <a th:href="@{/mealplanner/meal/insert}" class="btn btn-primary btn-lg px-4">
+                    <i class="bi bi-plus-circle me-2"></i>Create First Meal
                 </a>
             </div>
         </div>
@@ -198,7 +174,6 @@
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<div th:insert="~{fragments/scripts/meal-list-scripts}"></div>
 </body>
 </html>
