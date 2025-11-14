@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Planner - Menu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/menu.css}">
+</head>
+<body class="bg-gradient-to-right">
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-25 mb-5">
+    <div class="container">
+        <a th:href="@{/mealplanner/meal/main-menu}"
+           class="navbar-brand fw-bold">
+            <i class="bi bi-egg-fried me-2"> Meal Planner</i>
+        </a>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+
+            <!-- Header Section -->
+            <div class="text-center mb-5">
+                <div class="menu-icon">
+                    <i class="bi bi-list text-white fs-2"></i>
+                </div>
+                <h1 class="display-5 text-white fw-bold mb-3">Meal Planner Main Menu</h1>
+                <p class="lead text-white-50">Manage your meal collection</p>
+            </div>
+
+            <!-- Menu Cards -->
+            <div class="row g-4">
+
+                <!-- View All Meals -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card text-center menu-card h-100">
+                        <div class="card-body p-4">
+                            <div class="text-primary mb-3">
+                                <i class="bi bi-list-ul display-4"></i>
+                            </div>
+                            <h3 class="h4 text-primary mb-3">View All Meals</h3>
+                            <p class="text-muted mb-4">Browse your complete meal collection</p>
+                            <a th:href="@{/mealplanner/meal/list}"
+                               class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-eye me-2"></i>View Meals
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add New Meal -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card text-center menu-card h-100">
+                        <div class="card-body p-4">
+                            <div class="text-success mb-3">
+                                <i class="bi bi-plus-circle display-4"></i>
+                            </div>
+                            <h3 class="h4 text-success mb-3">Add New Meal</h3>
+                            <p class="text-muted mb-4">Create a new meal recipe</p>
+                            <a th:href="@{/mealplanner/meal/insert}"
+                               class="btn btn-success btn-lg w-100">
+                                <i class="bi bi-plus-lg me-2"></i>Add Meal
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Meals -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card text-center menu-card h-100">
+                        <div class="card-body p-4">
+                            <div class="text-warning mb-3">
+                                <i class="bi bi-search display-4"></i>
+                            </div>
+                            <h3 class="h4 text-warning mb-3">Search Meals</h3>
+                            <p class="text-muted mb-4">Find specific meals by name or ingredients</p>
+                            <a th:href="@{/mealplanner/meal/search}"
+                               class="btn btn-warning btn-lg w-100">
+                                <i class="bi bi-search me-2"></i>Search
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorite Meals -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card text-center menu-card h-100">
+                        <div class="card-body p-4">
+                            <div class="text-danger mb-3">
+                                <i class="bi bi-heart display-4"></i>
+                            </div>
+                            <h3 class="h4 text-danger mb-3">Favorite Meals</h3>
+                            <p class="text-muted mb-4">Your favorite meals collection</p>
+                            <a th:href="@{/mealplanner/meal/favorites}"
+                               class="btn btn-danger btn-lg w-100">
+                                <i class="bi bi-heart me-2"></i>Favorites
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
