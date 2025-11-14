@@ -10,15 +10,7 @@
 </head>
 <body class="bg-gradient-to-right">
 
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-25 mb-5">
-    <div class="container">
-        <a th:href="@{/mealplanner/meal/main-menu}"
-           class="navbar-brand fw-bold">
-            <i class="bi bi-egg-fried me-2"> Meal Planner</i>
-        </a>
-    </div>
-</nav>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <!-- Main Content -->
 <div class="container">
