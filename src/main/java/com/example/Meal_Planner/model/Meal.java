@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,22 +29,20 @@ public class Meal extends AbstractEntity {
     @Column(unique = true)
     private String uuid;
 
-    @NotNull(message = "Ο τύπος δεν μπορεί να είναι null.")
     @Enumerated(EnumType.STRING)
     private MealType mealType;
 
-    @Size(min = 2)
-    @NotBlank(message = "Η ονομασία είναι υποχρεωτική.")
     private String name;
 
-    @NotNull(message = "Τα συστατικά δεν μπορούν να είναι null.")
-    @Size(min = 2)
     private String ingredients;
 
-    @NotNull
     private Integer prepTime;
 
-    @NotNull
     private String instructions;
+
+    @PrePersist
+    public void initializeUUID() {
+        if (uuid == null) uuid = UUID.randomUUID().toString();
+    }
 }
 
