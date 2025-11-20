@@ -42,26 +42,35 @@ public class MealService implements IMealService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void updateMeal(MealEditDTO dto) throws EntityAlreadyExistsException, EntityNotFoundException {
         try {
             Meal meal = mealRepository.findByUuid(dto.getUuid())
                     .orElseThrow(() -> new EntityNotFoundException("Meal", "Meal not found"));
 
             if (!meal.getName().equals(dto.getName())) {
-                if (mealRepository.findByName(dto.getName()).isEmpty()) {
-                    meal.setName(dto.getName());
-                } else throw new EntityAlreadyExistsException
-                        ("Meal", "Meal with this name: " + dto.getName() + "already exists");
+                if (mealRepository.findByName(dto.getName()).isPresent()) {
+                    throw new EntityAlreadyExistsException
+                            ("Meal", "Meal with this name: " + dto.getName() + " already exists");
+                }
+                meal.setName(dto.getName());
             }
+
+            meal.setIngredients(dto.getIngredients());
+            meal.setMealType(dto.getMealType());
+            meal.setInstructions(dto.getInstructions());
+            meal.setPrepTime(dto.getPrepTime());
 
             mealRepository.save(meal);
 
             log.info("Meal with name={} updated.", dto.getName());
         } catch (EntityNotFoundException e) {
-            log.error("Update failed for meal with name={}. Entity not found.", dto.getName(), e);
+            log.error("Update failed for meal with UUID={}. Entity not found.", dto.getUuid(), e);
             throw e;
         } catch (EntityAlreadyExistsException e) {
             log.error("Update failed for meal with name={}. Entity already exists.", dto.getName(), e);
+            throw e;
+        } catch (Exception e) {
             throw e;
         }
     }
