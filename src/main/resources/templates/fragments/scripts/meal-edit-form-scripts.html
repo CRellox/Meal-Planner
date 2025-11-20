@@ -1,28 +1,44 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Auto-format ingredients input
-        const ingredientsInput = document.getElementById('ingredients');
-        ingredientsInput.addEventListener('blur', function() {
-            let ingredients = this.value
-                .split(',')
-                .map(ingredient => ingredient.trim())
-                .filter(ingredient => ingredient.length > 0)
-                .join(', ');
-            this.value = ingredients;
-        });
+        const form = document.querySelector('form');
 
-        // Auto-format instructions with step numbers
-        const instructionsInput = document.getElementById('instructions');
-        instructionsInput.addEventListener('blur', function() {
-            let instructions = this.value
-                .split('\n')
-                .map(step => step.trim())
-                .filter(step => step.length > 0)
-                .join('\n');
-            this.value = instructions;
+        form.addEventListener('submit', function(event) {
+            const mealName = document.getElementById('name');
+            const ingredients = document.getElementById('ingredients');
+            const instructions = document.getElementById('instructions');
+            const prepTime = document.getElementById('prepTime');
+            const mealType = document.getElementById('mealType');
+
+            let isValid = true;
+
+            // Simple validation
+            if (!mealName.value.trim()) {
+                alert('Please enter a meal name');
+                mealName.focus();
+                isValid = false;
+            } else if (!ingredients.value.trim()) {
+                alert('Please enter ingredients');
+                ingredients.focus();
+                isValid = false;
+            } else if (!instructions.value.trim()) {
+                alert('Please enter instructions');
+                instructions.focus();
+                isValid = false;
+            } else if (!prepTime.value || prepTime.value < 1) {
+                alert('Please enter preparation time (minimum 1 minute)');
+                prepTime.focus();
+                isValid = false;
+            } else if (!mealType.value) {
+                alert('Please select a meal type');
+                mealType.focus();
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
         });
     });
 </script>
