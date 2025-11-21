@@ -33,7 +33,7 @@ public class MealService implements IMealService {
             Meal meal = mapper.mapToMealEntity(dto);
             mealRepository.save(meal);
 
-            log.info("Meal with id={} saved.", dto.getId());
+            log.info("Meal with name={} saved.", dto.getName());
             return meal;
         } catch (EntityAlreadyExistsException e) {
             log.error("Save failed for Meal with name={}. Meal already exists", dto.getName(), e);
