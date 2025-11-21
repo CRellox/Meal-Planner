@@ -3,6 +3,7 @@ package com.example.Meal_Planner.mapper;
 import com.example.Meal_Planner.dto.MealEditDTO;
 import com.example.Meal_Planner.dto.MealInsertDTO;
 import com.example.Meal_Planner.dto.MealReadOnlyDTO;
+//import com.example.Meal_Planner.dto.UserInsertDTO;
 import com.example.Meal_Planner.model.Meal;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,14 @@ public class Mapper {
     }
 
     public MealEditDTO mapToMealEditDTO(Meal meal) {
-        return new MealEditDTO(meal.getMealType(), meal.getId(), meal.getUuid(), meal.getName(), meal.getIngredients(),
+        return new MealEditDTO(meal.getUuid(), meal.getMealType(), meal.getName(), meal.getIngredients(),
                 meal.getPrepTime(), meal.getInstructions());
     }
+
+//    public User mapToUserEntity(UserInsertDTO userInsertDTO) {
+//        return User.builder()
+//                .username(userInsertDTO.getUsername())
+//                .password(userInsertDTO.getPassword())
+//                .build();
+//    }
 }
