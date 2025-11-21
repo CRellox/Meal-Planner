@@ -2,6 +2,7 @@ package com.example.Meal_Planner.dto;
 
 import com.example.Meal_Planner.core.enums.MealType;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -16,27 +17,24 @@ import lombok.Setter;
 public class MealEditDTO {
 
     @NotNull
-    private MealType mealType;
-
-    @NotNull
-    private Long Id;
-
-    @NotNull
     private String uuid;
 
     @NotNull
-    @Size(min = 2, message = "Name must have at least 2 characters")
+    private MealType mealType;
+
+    @NotBlank //(message = "Name is required")
+    @Size(min = 2) //, message = "Name must have at least 2 characters")
     private String name;
 
-    @NotNull
-    @Size(min = 2, message = "Minimum 1 ingredient")
+    @NotBlank //(message = "Ingredients are required")
+    @Size(min = 2) //, message = "Minimum 1 ingredient is required.")
     private String ingredients;
 
-    @NotNull
-    @Min(value = 1, message = "Minimum 1 minuet")
+    @NotNull //(message = "Preparation time is required")
+    @Min(value = 1) //, message = "Preparation time must be at least 1 minute")
     private Integer prepTime;
 
-    @NotNull
-    @Size(min = 10, message = "Instructions must have at least 10 characters")
+    @NotBlank //(message = "Instructions are required")
+    @Size(min = 10) //, message = "Instructions must have at least 10 characters")
     private String instructions;
 }
