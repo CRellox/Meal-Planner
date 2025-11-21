@@ -3,13 +3,21 @@ package com.example.Meal_Planner.controller;
 import com.example.Meal_Planner.core.enums.MealType;
 import com.example.Meal_Planner.core.exceptions.EntityAlreadyExistsException;
 import com.example.Meal_Planner.core.exceptions.EntityNotFoundException;
+import com.example.Meal_Planner.dto.MealEditDTO;
 import com.example.Meal_Planner.dto.MealInsertDTO;
+import com.example.Meal_Planner.mapper.Mapper;
 import com.example.Meal_Planner.model.Meal;
 import com.example.Meal_Planner.repository.MealRepository;
 import com.example.Meal_Planner.service.MealService;
+import com.example.Meal_Planner.validator.MealEditValidator;
+import com.example.Meal_Planner.validator.MealInsertValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,10 +25,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/mealplanner/meal")
 @RequiredArgsConstructor
+@Slf4j
 public class MealController {
 
     private final MealRepository mealRepository;
     private final MealService mealService;
+    private final Mapper mapper;
+    private final MealInsertValidator mealInsertValidator;
+    private final MealEditValidator mealEditValidator;
 
     @GetMapping("/list")
     public String listMeals(@RequestParam(required = false) String mealType, Model model) {
@@ -33,6 +45,7 @@ public class MealController {
         }
 
         model.addAttribute("meals", meals);
+        // To sort the meal types
         model.addAttribute("selectedMealType", mealType != null ? mealType : "all");
         return "meal-list";
     }
@@ -44,18 +57,68 @@ public class MealController {
     }
 
     @PostMapping("/insert")
-    public String saveMeal(@ModelAttribute("mealInsertDTO") MealInsertDTO mealInsertDTO, Model model) {
+    public String saveMeal(@Valid @ModelAttribute("mealInsertDTO")
+                               MealInsertDTO mealInsertDTO, BindingResult bindingResult, Model model) {
+
+        Meal savedMeal;
+
+        mealInsertValidator.validate(mealInsertDTO, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            log.error("Validation errors: {}", bindingResult.getAllErrors());
+            return "meal-form";
+        }
+
         try {
-            mealService.saveMeal(mealInsertDTO);
+            savedMeal = mealService.saveMeal(mealInsertDTO);
             return "redirect:/mealplanner/meal/list";
         } catch (EntityAlreadyExistsException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("mealInsertDTO", mealInsertDTO);
             return "meal-form";
         }
     }
 
-    @GetMapping("/delete/{uuid}")
+    @PostMapping("/edit/{uuid}")
+    public String updateMeal(@PathVariable String uuid, @Valid @ModelAttribute("mealEditDTO")
+                             MealEditDTO mealEditDTO, BindingResult bindingResult, Model model) {
+
+        mealEditValidator.validate(mealEditDTO, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("names", mealRepository.findAll(Sort.by("name")));
+            return "meal-edit-form";
+        }
+
+        try {
+            mealService.updateMeal(mealEditDTO);
+            return "redirect:/mealplanner/meal/list";
+        } catch (EntityNotFoundException | EntityAlreadyExistsException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "meal-edit-form";
+        }
+    }
+
+    @GetMapping("/edit/{uuid}")
+    public String showMealEditForm(@PathVariable String uuid, Model model) {
+        try {
+            Meal meal = mealRepository.findByUuid(uuid)
+                    .orElseThrow(() -> new EntityNotFoundException("Meal", "Meal not found"));
+
+            model.addAttribute("mealEditDTO", mapper.mapToMealEditDTO(meal));
+            model.addAttribute("names", mealRepository.findAll(Sort.by("name")));
+
+            return "meal-edit-form";
+        } catch (EntityNotFoundException e) {
+            log.error("Meal with uuid={} was not found.", uuid, e);
+
+            model.addAttribute("names", mealRepository.findAll(Sort.by("name")));
+            model.addAttribute("errorMessage", e.getMessage());
+
+            return "meal-edit-form";
+        }
+    }
+
+    @PostMapping("/delete/{uuid}")
     public String deleteMeal(@PathVariable String uuid, Model model) {
         try {
             mealService.deleteMealByUUID(uuid);
