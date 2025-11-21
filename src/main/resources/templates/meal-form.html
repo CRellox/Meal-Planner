@@ -25,6 +25,12 @@
         </div>
     </div>
 
+    <!-- Error Messages -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        <span th:text="${errorMessage}"></span>
+    </div>
+
     <!-- Header Section -->
     <div class="row mb-4">
         <div class="col-12 text-center">
@@ -47,16 +53,23 @@
                 </div>
 
                 <div class="card-body p-4 p-md-5">
-                    <form th:action="@{/mealplanner/meal/insert}" th:object="${mealInsertDTO}" method="post">
+                    <form th:action="@{/mealplanner/meal/insert}"
+                          th:object="${mealInsertDTO}"
+                          method="post">
 
                         <!-- Meal Name -->
                         <div class="mb-4">
                             <label for="name" class="form-label fw-bold text-primary">
                                 <i class="bi bi-card-heading me-2"></i>Meal Name
                             </label>
-                            <input type="text" class="form-control form-control-lg"
+                            <input type="text"
+                                   class="form-control form-control-lg"
                                    id="name"
-                                   th:field="*{name}" placeholder="e.g., Moussaka, Pastitsio..." required>
+                                   th:field="*{name}"
+                                   placeholder="e.g., Moussaka, Pastitsio...">
+                            <div class="text-danger" th:if="${#fields.hasErrors('name')}">
+                                <span th:each="err : ${#fields.errors('name')}" th:text="${err}"></span>
+                            </div>
                             <div class="form-text">Give a descriptive name for your meal</div>
                         </div>
 
@@ -65,7 +78,9 @@
                             <label for="mealType" class="form-label fw-bold text-primary">
                                 <i class="bi bi-tag me-2"></i>Meal Type
                             </label>
-                            <select class="form-select form-select-lg" id="mealType" th:field="*{mealType}" required>
+                            <select class="form-select form-select-lg"
+                                    id="mealType"
+                                    th:field="*{mealType}">
                                 <option value="" disabled selected>Select meal type...</option>
                                 <option value="BREAKFAST">Breakfast</option>
                                 <option value="LUNCH">Lunch</option>
@@ -73,6 +88,9 @@
                                 <option value="SNACK">Snack</option>
                                 <option value="DESSERT">Dessert</option>
                             </select>
+                            <div class="text-danger" th:if="${#fields.hasErrors('mealType')}">
+                                <span th:each="err : ${#fields.errors('mealType')}" th:text="${err}"></span>
+                            </div>
                         </div>
 
                         <!-- Ingredients -->
@@ -84,9 +102,13 @@
                                       id="ingredients"
                                       th:field="*{ingredients}"
                                       rows="4"
-                                      placeholder="Write the meal ingredients, separated by commas..." required></textarea>
+                                      placeholder="Write the meal ingredients, separated by commas..."></textarea>
+                            <div class="text-danger" th:if="${#fields.hasErrors('ingredients')}">
+                                <span th:each="err : ${#fields.errors('ingredients')}" th:text="${err}"></span>
+                            </div>
                             <div class="form-text">
-                                Separate ingredients with commas (e.g., Tomatoes, onions, olive oil)</div>
+                                Separate ingredients with commas (e.g., Tomatoes, onions, olive oil)
+                            </div>
 
                             <!-- Example Tags -->
                             <div class="mt-3">
@@ -107,18 +129,16 @@
                                 <i class="bi bi-list-check me-2"></i>Recipe Instructions
                             </label>
                             <textarea class="form-control"
-                                      id="instructions" th:field="*{instructions}"
+                                      id="instructions"
+                                      th:field="*{instructions}"
                                       rows="6"
-                                      placeholder="Write step-by-step instructions for preparing the meal...
-                                            Example:
-                                            1. First, chop the vegetables...
-                                            2. Then, heat the oil in a pan...
-                                            3. Add the ingredients and cook for 10 minutes..."
-                                      required></textarea>
-
+                                      placeholder="Write step-by-step instructions for preparing the meal..."></textarea>
+                            <div class="text-danger" th:if="${#fields.hasErrors('instructions')}">
+                                <span th:each="err : ${#fields.errors('instructions')}" th:text="${err}"></span>
+                            </div>
                             <div class="form-text">
                                 Write clear, step-by-step instructions for preparing the meal.
-                                Use numbers or bullet points for each step.
+                                Use numbers for each step (1. , 2. , 3. etc...)
                             </div>
 
                             <!-- Example Steps -->
@@ -153,11 +173,15 @@
                                        class="form-control form-control-lg"
                                        id="prepTime"
                                        th:field="*{prepTime}"
-                                       min="1" max="480"
-                                       placeholder="30" required>
+                                       min="1"
+                                       step="1"
+                                       placeholder="30">
                                 <span class="input-group-text">minutes</span>
                             </div>
-                            <div class="form-text">The time required to prepare the meal</div>
+                            <div class="text-danger" th:if="${#fields.hasErrors('prepTime')}">
+                                <span th:each="err : ${#fields.errors('prepTime')}" th:text="${err}"></span>
+                            </div>
+                            <div class="form-text">The time required to prepare the meal (minimum 1 minute)</div>
                         </div>
 
                         <!-- Form Buttons -->
@@ -170,7 +194,7 @@
                             </div>
                             <div class="col-6">
                                 <button type="submit" class="btn btn-primary btn-lg w-100">
-                                    <i class="bi bi-check-circle me-2"></i>Save
+                                    <i class="bi bi-check-circle me-2"></i>Save Meal
                                 </button>
                             </div>
                         </div>
