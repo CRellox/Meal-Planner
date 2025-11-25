@@ -34,6 +34,8 @@ public class Meal extends AbstractEntity {
 
     private String instructions;
 
+    private boolean favorite = false;
+
     @PrePersist
     public void initializeUUID() {
         if (uuid == null) uuid = UUID.randomUUID().toString();

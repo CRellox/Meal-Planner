@@ -22,4 +22,5 @@ public class MealReadOnlyDTO {
     private MealType mealType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean favorite;
 }

@@ -34,4 +34,6 @@ public class MealInsertDTO {
     @NotBlank //(message = "Instructions are required")
     @Size(min = 10) //, message = "Instructions must have at least 10 characters")
     private String instructions;
+
+    private boolean favorite;
 }
