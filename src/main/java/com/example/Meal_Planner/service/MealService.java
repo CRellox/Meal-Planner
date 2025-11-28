@@ -1,15 +1,20 @@
 package com.example.Meal_Planner.service;
 
+import com.example.Meal_Planner.core.enums.MealType;
 import com.example.Meal_Planner.core.exceptions.EntityAlreadyExistsException;
 import com.example.Meal_Planner.core.exceptions.EntityNotFoundException;
 import com.example.Meal_Planner.dto.MealEditDTO;
 import com.example.Meal_Planner.dto.MealInsertDTO;
+import com.example.Meal_Planner.dto.MealReadOnlyDTO;
 import com.example.Meal_Planner.mapper.Mapper;
 import com.example.Meal_Planner.model.Meal;
 import com.example.Meal_Planner.repository.MealRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -89,5 +94,22 @@ public class MealService implements IMealService {
             log.error("Delete failed for Meal with uuid={}. Meal not found.", uuid, e);
             throw e;
         }
+    }
+
+    @Override
+    public Page<MealReadOnlyDTO> getPaginatedMeals(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Meal> meals = mealRepository.findAll(pageable);
+        log.debug("Get paginated meals were returned successfully with page={} and size={}", page, size);
+        return meals.map(mapper::mapToMealReadOnlyDTO);
+    }
+
+    @Override
+    public Page<MealReadOnlyDTO> getPaginatedMealsByType(MealType mealType, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Meal> meals = mealRepository.findByMealType(mealType, pageable);
+        log.debug("Get paginated meals by type {} were returned successfully with page={} and size={}",
+                mealType, page, size);
+        return meals.map(mapper::mapToMealReadOnlyDTO);
     }
 }
