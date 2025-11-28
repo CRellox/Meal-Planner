@@ -4,7 +4,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Auto-format ingredients input
         const ingredientsInput = document.getElementById('ingredients');
-        ingredientsInput.addEventListener('input', function() {
+        ingredientsInput.addEventListener('blur', function() {
             let ingredients = this.value
                 .split(',')
                 .map(ingredient => ingredient.trim())
@@ -18,7 +18,7 @@
 
         // Auto-format instructions
         const instructionsInput = document.getElementById('instructions');
-        instructionsInput.addEventListener('input', function() {
+        instructionsInput.addEventListener('blur', function() {
             let instructions = this.value
                 .split('\n')
                 .map(step => step.trim())
