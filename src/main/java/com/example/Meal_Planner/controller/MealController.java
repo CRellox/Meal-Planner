@@ -5,22 +5,24 @@ import com.example.Meal_Planner.core.exceptions.EntityAlreadyExistsException;
 import com.example.Meal_Planner.core.exceptions.EntityNotFoundException;
 import com.example.Meal_Planner.dto.MealEditDTO;
 import com.example.Meal_Planner.dto.MealInsertDTO;
+import com.example.Meal_Planner.dto.MealReadOnlyDTO;
 import com.example.Meal_Planner.mapper.Mapper;
 import com.example.Meal_Planner.model.Meal;
 import com.example.Meal_Planner.repository.MealRepository;
-import com.example.Meal_Planner.service.MealService;
+import com.example.Meal_Planner.service.IMealService;
 import com.example.Meal_Planner.validator.MealEditValidator;
 import com.example.Meal_Planner.validator.MealInsertValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+//import java.util.List;
 
 @Controller
 @RequestMapping("/mealplanner/meal")
@@ -29,26 +31,26 @@ import java.util.List;
 public class MealController {
 
     private final MealRepository mealRepository;
-    private final MealService mealService;
+    private final IMealService mealService;
     private final Mapper mapper;
     private final MealInsertValidator mealInsertValidator;
     private final MealEditValidator mealEditValidator;
 
-    @GetMapping("/list")
-    public String listMeals(@RequestParam(required = false) String mealType, Model model) {
-        List<Meal> meals;
-
-        if (mealType != null && !mealType.isEmpty() && !mealType.equals("all")) {
-            meals = mealRepository.findByMealType(MealType.valueOf(mealType));
-        } else {
-            meals = mealRepository.findAll();
-        }
-
-        model.addAttribute("meals", meals);
-        // To sort the meal types
-        model.addAttribute("selectedMealType", mealType != null ? mealType : "all");
-        return "meal-list";
-    }
+//    @GetMapping("/list")
+//    public String listMeals(@RequestParam(required = false) String mealType, Model model) {
+//        List<Meal> meals;
+//
+//        if (mealType != null && !mealType.isEmpty() && !mealType.equals("all")) {
+//            meals = mealRepository.findByMealType(MealType.valueOf(mealType));
+//        } else {
+//            meals = mealRepository.findAll();
+//        }
+//
+//        model.addAttribute("meals", meals);
+//        // To sort the meal types
+//        model.addAttribute("selectedMealType", mealType != null ? mealType : "all");
+//        return "meal-list";
+//    }
 
     @GetMapping("/insert")
     public String showMealForm(Model model) {
@@ -132,5 +134,28 @@ public class MealController {
     @GetMapping("/main-menu")
     public String showMainMenu() {
         return "main-menu";
+    }
+
+    @GetMapping("/list")
+    public String getPaginatedMeals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String mealType,
+            Model model) {
+
+        Page<MealReadOnlyDTO> mealsPage;
+
+        if (mealType != null && !mealType.isEmpty() && !mealType.equals("all")) {
+            mealsPage = mealService.getPaginatedMealsByType(MealType.valueOf(mealType), page, size);
+        } else {
+            mealsPage = mealService.getPaginatedMeals(page, size);
+        }
+
+        model.addAttribute("mealsPage", mealsPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", mealsPage.getTotalPages());
+        model.addAttribute("selectedMealType", mealType != null ? mealType : "all");
+
+        return "meal-list";
     }
 }
