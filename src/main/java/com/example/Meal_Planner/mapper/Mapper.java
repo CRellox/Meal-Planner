@@ -27,10 +27,11 @@ public class Mapper {
                 meal.getPrepTime(), meal.getInstructions(), meal.isFavorite());
     }
 
-//    public User mapToUserEntity(UserInsertDTO userInsertDTO) {
-//        return User.builder()
-//                .username(userInsertDTO.getUsername())
-//                .password(userInsertDTO.getPassword())
-//                .build();
-//    }
+    public User mapToUserEntity(UserInsertDTO userInsertDTO) {
+        return User.builder()
+                .username(userInsertDTO.getUsername())
+                .password(userInsertDTO.getPassword())
+                .email(userInsertDTO.getEmail())
+                .build();
+    }
 }
