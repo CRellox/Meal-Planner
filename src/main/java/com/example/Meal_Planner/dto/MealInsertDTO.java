@@ -19,19 +19,19 @@ public class MealInsertDTO {
     @NotNull
     private MealType mealType;
 
-    @NotBlank //(message = "Name is required")
+    @NotBlank       //(message = "Name is required")
     @Size(min = 2) //, message = "Name must have at least 2 characters")
     private String name;
 
-    @NotBlank //(message = "Ingredients are required")
+    @NotBlank       //(message = "Ingredients are required")
     @Size(min = 2) //, message = "Minimum 1 ingredient is required.")
     private String ingredients;
 
-    @NotNull //(message = "Preparation time is required")
+    @NotNull        //(message = "Preparation time is required")
     @Min(value = 1) //, message = "Preparation time must be at least 1 minute")
     private Integer prepTime;
 
-    @NotBlank //(message = "Instructions are required")
+    @NotBlank       //(message = "Instructions are required")
     @Size(min = 10) //, message = "Instructions must have at least 10 characters")
     private String instructions;
 
