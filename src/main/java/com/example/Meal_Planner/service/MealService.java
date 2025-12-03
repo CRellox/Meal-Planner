@@ -27,7 +27,7 @@ public class MealService implements IMealService {
     private final Mapper mapper;
 
     @Override
-    @Transactional(rollbackOn = { EntityAlreadyExistsException.class })
+    @Transactional(rollbackOn = {EntityAlreadyExistsException.class})
     public Meal saveMeal(MealInsertDTO dto) throws EntityAlreadyExistsException {
         try {
             if (dto.getName() != null && mealRepository.findByName(dto.getName()).isPresent()) {
@@ -111,5 +111,23 @@ public class MealService implements IMealService {
         log.debug("Get paginated meals by type {} were returned successfully with page={} and size={}",
                 mealType, page, size);
         return meals.map(mapper::mapToMealReadOnlyDTO);
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public Meal getMealByUuid(String uuid) throws EntityNotFoundException {
+        try {
+            Meal meal = mealRepository.findByUuid(uuid)
+                    .orElseThrow(() -> new EntityNotFoundException ("Meal", "Meal with uuid: " + uuid + " not found"));
+
+            log.info("Meal with uuid={} was successfully retrieved", uuid);
+            return meal;
+
+        } catch (EntityNotFoundException e) {
+            log.error("Failed retrieving meal with uuid={}. Entity not found.", uuid, e);
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

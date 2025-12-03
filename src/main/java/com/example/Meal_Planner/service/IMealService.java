@@ -20,4 +20,6 @@ public interface IMealService {
     Page<MealReadOnlyDTO> getPaginatedMeals(int page, int size);
 
     Page<MealReadOnlyDTO> getPaginatedMealsByType(MealType mealType, int page, int size);
+
+    Meal getMealByUuid(String uuid) throws  EntityNotFoundException;
 }
