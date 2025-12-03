@@ -38,6 +38,7 @@
             // Update the visible meals count
             totalMealsCount.textContent = visibleCount;
         }
+    }
 
         // Meal type filter functionality
         filterButtons.forEach(button => {
@@ -70,5 +71,21 @@
             applyFilters();
             searchInput.focus();
         });
+
+    mealRows.forEach(row => {
+        row.addEventListener('click', function(e) {
+            if (e.target.closest('button') ||
+                e.target.closest('a') ||
+                e.target.closest('.meal-actions') ||
+                e.target.closest('form')) {
+                return;
+            }
+
+            const uuid = this.getAttribute('data-meal-uuid');
+            if (uuid) {
+                window.location.href = `/mealplanner/meal/view/${uuid}`;
+            }
+        });
     });
+});
 </script>
