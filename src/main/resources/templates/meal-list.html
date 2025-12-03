@@ -61,6 +61,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
     <!-- Meals Table -->
     <div class="card shadow-lg border-0 meal-card">
@@ -128,8 +129,11 @@
                     </tr>
                     </thead>
                     <tbody id="mealsTableBody">
-                    <tr th:each="meal : ${mealsPage.content}" class="border-bottom meal-row"
-                        th:attr="data-meal-type=${meal.mealType.name()}">
+                    <tr th:each="meal : ${mealsPage.content}"
+                        class="border-bottom meal-row"
+                        th:attr="data-meal-type=${meal.mealType.name()}"
+                        th:data-meal-uuid="${meal.uuid}"
+                        th:data-view-url="@{/mealplanner/meal/{uuid}(uuid=${meal.uuid})}">
                         <td class="ps-4">
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
