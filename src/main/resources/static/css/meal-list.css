@@ -139,3 +139,23 @@
 .ms-auto {
     margin-left: auto !important;
 }
+
+.meal-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.meal-row:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.meal-actions,
+.meal-actions * {
+    cursor: default !important;
+}
+
+.meal-actions a,
+.meal-actions button,
+.meal-actions form {
+    cursor: pointer !important;
+}
