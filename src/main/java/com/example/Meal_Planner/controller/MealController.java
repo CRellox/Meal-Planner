@@ -158,4 +158,15 @@ public class MealController {
 
         return "meal-list";
     }
+
+    @GetMapping("/view/{uuid}")
+    public String viewMeal(@PathVariable String uuid, Model model) {
+        try {
+            Meal meal = mealService.getMealByUuid(uuid);
+            model.addAttribute("meal", meal);
+            return "meal-details";
+        } catch (EntityNotFoundException e) {
+            return "redirect:/mealplanner/meal/list?error=not_found";
+        }
+    }
 }
