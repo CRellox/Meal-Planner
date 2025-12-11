@@ -169,4 +169,9 @@ public class MealController {
             return "redirect:/mealplanner/meal/list?error=not_found";
         }
     }
+
+    @GetMapping("/favorites")
+    public String viewFavoriteList() {
+        return "meal-favorites";
+    }
 }

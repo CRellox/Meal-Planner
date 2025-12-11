@@ -1,0 +1,242 @@
+.bg-gradient-to-right {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.meal-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 15px;
+}
+
+.meal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.favorite-row {
+    border-left: 5px solid #dc3545;
+    background-color: rgba(220, 53, 69, 0.05);
+}
+
+.favorite-badge {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+    color: white;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.meal-type-badge {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+.prep-time-badge {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+.heart-icon {
+    color: #dc3545;
+    text-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.instructions-preview {
+    max-height: 80px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-height: 1.4;
+}
+
+.actions-column {
+    width: 150px;
+    text-align: center;
+}
+
+.prep-time-column {
+    width: 120px;
+    text-align: center;
+}
+
+.meal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.search-container {
+    max-width: 300px;
+}
+
+.meal-actions .btn {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+}
+
+.search-container .input-group {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .actions-column {
+        width: 120px;
+    }
+
+    .meal-actions {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .meal-actions .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .search-container {
+        max-width: 100%;
+    }
+
+    .prep-time-column {
+        width: 100px;
+    }
+}
+
+.table-responsive {
+    border-radius: 0 0 15px 15px;
+}
+
+.meal-actions .btn {
+    min-width: 36px;
+    padding: 0.375rem;
+}
+
+.meal-actions .btn-sm {
+    font-size: 0.8rem;
+}
+
+.search-container {
+    max-width: 350px;
+    width: 100%;
+}
+
+.search-bar-custom {
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid #dee2e6;
+    overflow: hidden;
+}
+
+.search-bar-custom .input-group-text {
+    background: white;
+    border: none;
+    padding-left: 20px;
+}
+
+.search-bar-custom .form-control {
+    border: none;
+    box-shadow: none;
+    padding: 12px 0;
+}
+
+.search-bar-custom .form-control:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.search-bar-custom .btn {
+    border: none;
+    background: white;
+    padding-right: 20px;
+    transition: all 0.3s ease;
+}
+
+.search-bar-custom .btn:hover {
+    background: #f8f9fa;
+    color: #0d6efd;
+}
+
+.ms-auto {
+    margin-left: auto !important;
+}
+
+.meal-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.meal-row:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.meal-actions,
+.meal-actions * {
+    cursor: default !important;
+}
+
+.meal-actions a,
+.meal-actions button,
+.meal-actions form {
+    cursor: pointer !important;
+}
+
+.stats-gradient-card {
+    border: none;
+    border-radius: 15px;
+    color: white;
+    height: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.stats-gradient-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.stats-gradient-card i {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.stats-gradient-card h5 {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 10px;
+}
+
+.stats-gradient-card h2 {
+    font-size: 2.8rem;
+    margin-bottom: 5px;
+}
+
+.heart-badge {
+    background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}

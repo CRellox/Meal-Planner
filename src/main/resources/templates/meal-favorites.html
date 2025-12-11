@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Meals - Meal Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/meal-list.css}">
+    <link rel="stylesheet" th:href="@{/css/meal-favorites.css}">
+
+</head>
+<body class="bg-gradient-to-right">
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="d-flex justify-content-end">
+                <a th:href="@{/mealplanner/meal/main-menu}"
+                   class="btn btn-primary btn-lg fw-bold shadow-sm bg-gradient">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Menu
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <div class="row mb-5 align-items-center">
+        <!-- Favorite Meals Stats -->
+        <div class="col-md-3 mb-3">
+            <div class="stats-gradient-card"
+                 style="background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);">
+                <i class="bi bi-heart-fill"></i>
+                <h5>Favorite Meals</h5>
+                <h2 class="fw-bold mb-0" th:text="${favoritesCount}">0</h2>
+            </div>
+        </div>
+
+        <!-- Title Section -->
+        <div class="col-md-6 mb-3 text-center">
+            <h1 class="display-4 text-white fw-bold mb-2">
+                <i class="bi bi-heart-fill me-2 heart-icon"></i>My Favorite Meals
+            </h1>
+            <p class="lead text-white-50 mb-0">Your most loved and frequently prepared meals!</p>
+        </div>
+
+        <!-- Avg Prep Time Stats -->
+        <div class="col-md-3 mb-3">
+            <div class="stats-gradient-card"
+                 style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                <i class="bi bi-clock"></i>
+                <h5>Avg Prep Time</h5>
+                <h2 class="fw-bold mb-0" th:text="${avgPrepTime}">0</h2>
+                <small class="opacity-75">minutes</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorite Meals Table -->
+    <div th:if="${not #lists.isEmpty(favoriteMeals)}">
+        <div class="card shadow-lg border-0 meal-card">
+            <div class="card-header bg-white py-4">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <h3 class="h4 mb-0 text-primary">
+                            <i class="bi bi-table me-2"></i>Favorite Meals List
+                        </h3>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <!-- Search Bar -->
+                            <div class="search-container me-4">
+                                <div class="input-group search-bar-custom">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="bi bi-search text-primary"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0 border-end-0" id="searchInput"
+                                           placeholder="Search favorite meals...">
+                                    <button class="btn btn-outline-primary border-start-0" type="button" id="clearSearch">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Filter Buttons -->
+                            <div class="btn-group" id="filterButtons">
+                                <button class="btn btn-primary active" data-filter="all">All</button>
+                                <button class="btn btn-outline-primary" data-filter="BREAKFAST">Breakfast</button>
+                                <button class="btn btn-outline-primary" data-filter="SNACK">Snack</button>
+                                <button class="btn btn-outline-primary" data-filter="LUNCH">Lunch</button>
+                                <button class="btn btn-outline-primary" data-filter="DINNER">Dinner</button>
+                                <button class="btn btn-outline-primary" data-filter="DESSERT">Dessert</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-primary">
+                        <tr>
+                            <th class="ps-4 py-3"><i class="bi bi-arrow-down-up me-2"></i>Name</th>
+                            <th class="py-3"><i class="bi bi-tag me-2"></i>Type</th>
+                            <th class="py-3"><i class="bi bi-basket me-2"></i>Ingredients</th>
+                            <th class="py-3"><i class="bi bi-list-check me-2"></i>Instructions</th>
+                            <th class="py-3 prep-time-column"><i class="bi bi-alarm me-2"></i>Prep Time</th>
+                            <th class="pe-4 py-3 actions-column">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="mealsTableBody">
+                        <tr th:each="meal : ${favoriteMeals}"
+                            class="border-bottom meal-row favorite-row"
+                            th:attr="data-meal-type=${meal.mealType.name()}"
+                            th:data-meal-uuid="${meal.uuid}">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-danger bg-opacity-10 rounded-circle p-3 me-3">
+                                        <i class="bi bi-heart-fill text-danger"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold" th:text="${meal.name}"></h6>
+                                        <small class="text-danger fw-bold">
+                                            <i class="bi bi-heart-fill me-1"></i>Favorite
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div th:switch="${meal.mealType.name()}">
+                                    <span th:case="'BREAKFAST'" class="badge fs-6 px-3 py-2 bg-primary">BREAKFAST</span>
+                                    <span th:case="'LUNCH'" class="badge fs-6 px-3 py-2 bg-success">LUNCH</span>
+                                    <span th:case="'DINNER'" class="badge fs-6 px-3 py-2 bg-danger">DINNER</span>
+                                    <span th:case="'SNACK'" class="badge fs-6 px-3 py-2 bg-info">SNACK</span>
+                                    <span th:case="'DESSERT'" class="badge fs-6 px-3 py-2 bg-warning text-dark">DESSERT</span>
+                                </div>
+                            </td>
+                            <td><p class="mb-0" th:text="${meal.ingredients}"></p></td>
+                            <td><div class="instructions-preview text-muted" th:text="${meal.instructions}"></div></td>
+                            <td class="prep-time-column">
+                                <span class="badge bg-light text-dark prep-time-badge">
+                                    <i class="bi bi-clock me-1"></i>
+                                    <span th:text="${meal.prepTime} + ' min'"></span>
+                                </span>
+                            </td>
+                            <td class="pe-4 actions-column">
+                                <div class="meal-actions">
+                                    <!-- Remove Favorite Button -->
+                                    <form th:action="@{/mealplanner/meal/toggle-favorite/{uuid}(uuid=${meal.uuid})}"
+                                          method="post"
+                                          class="d-inline">
+                                        <button type="submit"
+                                                class="btn btn-outline-danger btn-sm"
+                                                title="Remove from Favorites">
+                                            <i class="bi bi-heartbreak-fill"></i>
+                                        </button>
+                                    </form>
+
+                                    <!-- Edit Button -->
+                                    <a th:href="@{/mealplanner/meal/edit/{uuid}(uuid=${meal.uuid})}"
+                                       class="btn btn-outline-primary btn-sm"
+                                       title="Edit Meal">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <!-- Delete Button -->
+                                    <form th:action="@{/mealplanner/meal/delete/{uuid}(uuid=${meal.uuid})}"
+                                          method="post"
+                                          class="d-inline"
+                                          th:onsubmit="return confirm('Are you sure you want to delete this meal?')">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete Meal">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div th:if="${#lists.isEmpty(favoriteMeals)}" class="text-center py-5">
+        <div class="card bg-white meal-card py-5">
+            <div class="card-body">
+                <i class="bi bi-heart display-1 text-danger mb-4"></i>
+                <h3 class="h2 text-muted mb-3">No favorite meals found</h3>
+                <p class="text-muted mb-4">Start by adding some meals to your favorites!</p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a th:href="@{/mealplanner/meal/list}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-list me-2"></i>View All Meals
+                    </a>
+                    <a th:href="@{/mealplanner/meal/insert}" class="btn btn-success btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>Create New Meal
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<div th:insert="~{fragments/scripts/meal-favorites-scripts}"></div>
+
+</body>
+</html>
