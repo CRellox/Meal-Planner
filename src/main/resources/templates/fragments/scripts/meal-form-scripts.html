@@ -15,19 +15,4 @@
                 this.value = ingredients;
             }
         });
-
-        // Auto-format instructions
-        const instructionsInput = document.getElementById('instructions');
-        instructionsInput.addEventListener('blur', function() {
-            let instructions = this.value
-                .split('\n')
-                .map(step => step.trim())
-                .filter(step => step.length > 0)
-                .join('\n');
-
-            if (this.value !== instructions) {
-                this.value = instructions;
-            }
-        });
-    });
 </script>
