@@ -1,103 +1,154 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const filterButtons = document.querySelectorAll('#filterButtons button');
-        const mealRows = document.querySelectorAll('.meal-row');
-        const totalMealsCount = document.getElementById('totalMealsCount');
-        const searchInput = document.getElementById('searchInput');
-        const clearSearch = document.getElementById('clearSearch');
+     const filterButtons = document.querySelectorAll('#filterButtons button');
+     const mealRows = document.querySelectorAll('.meal-row');
+     const searchInput = document.getElementById('searchInput');
+     const clearSearch = document.getElementById('clearSearch');
+     const avgPrepTimeDisplay = document.getElementById('avgPrepTimeDisplay');
+     const totalMealsCount = document.getElementById('totalMealsCount');
 
-        let currentFilter = 'all';
-        let currentSearch = '';
+     let currentFilter = 'all';
+     let currentSearch = '';
 
-        // Function to apply both filters
-        function applyFilters() {
-            let visibleCount = 0;
+     // Apply filters to meal rows
+     function applyFilters() {
+         mealRows.forEach(row => {
+             const mealType = row.getAttribute('data-meal-type');
+             const mealName = row.querySelector('h6').textContent.toLowerCase();
+             const ingredients = row.querySelector('td:nth-child(3) p').textContent.toLowerCase();
+             const instructions = row.querySelector('.instructions-preview').textContent.toLowerCase();
 
-            mealRows.forEach(row => {
-                const mealType = row.getAttribute('data-meal-type');
-                const mealName = row.querySelector('h6').textContent.toLowerCase();
-                const ingredients = row.querySelector('p').textContent.toLowerCase();
-                const instructions = row.querySelector('.instructions-preview').textContent.toLowerCase();
+             const matchesFilter = currentFilter === 'all' || mealType === currentFilter;
+             const matchesSearch = currentSearch === '' ||
+                 mealName.includes(currentSearch) ||
+                 ingredients.includes(currentSearch) ||
+                 instructions.includes(currentSearch);
 
-                const matchesFilter = currentFilter === 'all' || mealType === currentFilter;
-                const matchesSearch = currentSearch === '' ||
-                    mealName.includes(currentSearch) ||
-                    ingredients.includes(currentSearch) ||
-                    instructions.includes(currentSearch);
+             if (matchesFilter && matchesSearch) {
+                 row.style.display = '';
+             } else {
+                 row.style.display = 'none';
+             }
+         });
 
-                if (matchesFilter && matchesSearch) {
-                    row.style.display = '';
-                    visibleCount++;
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+         // Update visible count if element exists
+         if (totalMealsCount) {
+             const visibleRows = document.querySelectorAll('.meal-row[style=""]').length;
+             totalMealsCount.textContent = visibleRows;
+         }
+         document.dispatchEvent(new CustomEvent('filtersApplied'));
+     }
 
-            // Update the visible meals count
-            if (totalMealsCount) {
-                totalMealsCount.textContent = visibleCount;
-            }
-        }
+     // Filter button click handler
+     if (filterButtons.length > 0) {
+         filterButtons.forEach(button => {
+             button.addEventListener('click', function() {
+                 // Remove active class from all buttons
+                 filterButtons.forEach(btn => {
+                     btn.classList.remove('btn-primary', 'active');
+                     btn.classList.add('btn-outline-primary');
+                 });
 
-        // Meal type filter functionality
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remove active class from all buttons
-                filterButtons.forEach(btn => {
-                    btn.classList.remove('btn-primary', 'active');
-                    btn.classList.add('btn-outline-primary');
-                });
+                 // Add active class to clicked button
+                 this.classList.remove('btn-outline-primary');
+                 this.classList.add('btn-primary', 'active');
 
-                // Add active class to clicked button
-                this.classList.remove('btn-outline-primary');
-                this.classList.add('btn-primary', 'active');
+                 currentFilter = this.getAttribute('data-filter');
+                 applyFilters();
+             });
+         });
+     }
 
-                currentFilter = this.getAttribute('data-filter');
-                applyFilters();
-            });
-        });
+     // Search input handler
+     if (searchInput) {
+         searchInput.addEventListener('input', function() {
+             currentSearch = this.value.toLowerCase();
+             applyFilters();
+         });
+     }
 
-        // Search functionality
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                currentSearch = this.value.toLowerCase();
-                applyFilters();
-            });
-        }
+     // Clear search handler
+     if (clearSearch) {
+         clearSearch.addEventListener('click', function() {
+             if (searchInput) {
+                 searchInput.value = '';
+             }
+             currentSearch = '';
+             applyFilters();
+             if (searchInput) {
+                 searchInput.focus();
+             }
+         });
+     }
 
-        // Clear search
-        if (clearSearch) {
-            clearSearch.addEventListener('click', function() {
-                if (searchInput) {
-                    searchInput.value = '';
-                }
-                currentSearch = '';
-                applyFilters();
-                if (searchInput) {
-                    searchInput.focus();
-                }
-            });
-        }
+     // Click handler for meal rows
+     mealRows.forEach(row => {
+         row.addEventListener('click', function(e) {
+             if (e.target.closest('button') ||
+                 e.target.closest('a') ||
+                 e.target.closest('.meal-actions') ||
+                 e.target.closest('form')) {
+                 return;
+             }
 
-        // Click row to view meal
-        mealRows.forEach(row => {
-            row.addEventListener('click', function(e) {
-                if (e.target.closest('button') ||
-                    e.target.closest('a') ||
-                    e.target.closest('.meal-actions') ||
-                    e.target.closest('form')) {
-                    return;
-                }
+             // Get view URL from data attribute
+             const viewUrl = this.getAttribute('data-view-url');
+             if (viewUrl) {
+                 window.location.href = viewUrl;
+                 return;
+             }
 
-                const uuid = this.getAttribute('data-meal-uuid');
-                const viewUrl = this.getAttribute('data-view-url');
-                if (uuid && viewUrl) {
-                    window.location.href = viewUrl;
-                }
-            });
-        });
+             // Fallback: construct URL from UUID
+             const uuid = this.getAttribute('data-meal-uuid');
+             if (uuid) {
+                 window.location.href = `/mealplanner/meal/view/${uuid}`;
+             }
+         });
+     });
 
-        // Initialize filters on page load
-        applyFilters();
-    });
+     function calculateAvgPrepTime() {
+         let totalTime = 0;
+         let count = 0;
+
+         mealRows.forEach(row => {
+             if (row.style.display !== 'none') {
+                 const prepTimeElement = row.querySelector('.prep-time-badge span:last-child');
+                 if (prepTimeElement) {
+                     const prepTimeText = prepTimeElement.textContent;
+                     const prepTime = parseInt(prepTimeText);
+                     if (!isNaN(prepTime)) {
+                         totalTime += prepTime;
+                         count++;
+                     }
+                 }
+             }
+         });
+
+         return count > 0 ? Math.round(totalTime / count) : 0;
+     }
+
+     // Update average prep time display
+     function updateAvgPrepTime() {
+         if (avgPrepTimeDisplay) {
+             const avgTime = calculateAvgPrepTime();
+             avgPrepTimeDisplay.textContent = avgTime;
+         }
+     }
+
+     // Update all statistics
+     function updateAllStats() {
+         updateAvgPrepTime();
+     }
+
+     // Listen for filter changes (custom event)
+     document.addEventListener('filtersApplied', updateAllStats);
+
+     // Initialize filters on page load
+     applyFilters();
+
+     // Initial stats calculation
+     updateAllStats();
+ });
 </script>

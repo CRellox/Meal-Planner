@@ -24,16 +24,14 @@
         </div>
     </div>
 
-    <!-- Header -->
+    <!-- Header Section -->
     <div class="row mb-5 align-items-center">
         <!-- Total Meals Card -->
         <div class="col-md-3 mb-3">
-            <div class="card text-white bg-success meal-card">
-                <div class="card-body text-center">
-                    <i class="bi bi-list-ul display-6 mb-2"></i>
-                    <h5 class="card-title">Total Meals</h5>
-                    <h2 class="display-6 fw-bold" th:text="${mealsPage.totalElements}">0</h2>
-                </div>
+            <div class="stats-gradient-card stats-card-white">
+                <i class="bi bi-list-ul"></i>
+                <h5>Total Meals</h5>
+                <h2 class="fw-bold mb-0" th:text="${mealsPage.totalElements}">0</h2>
             </div>
         </div>
 
@@ -46,24 +44,16 @@
 
         <!-- Avg Prep Time Card -->
         <div class="col-md-3 mb-3">
-            <div class="card text-white bg-success meal-card">
-                <div class="card-body text-center">
-                    <i class="bi bi-clock display-6 mb-2"></i>
-                    <h5 class="card-title">Avg Prep Time</h5>
-                    <h2 class="display-6 fw-bold">
-                        <span th:if="${mealsPage.totalElements > 0}">
-                    <span th:text="${#numbers.formatInteger(
-                        #aggregates.sum(mealsPage.content.![prepTime]) / mealsPage.numberOfElements
-                    , 0)} + ' min'"></span>
-                </span>
-                        <span th:if="${mealsPage.totalElements == 0}">0 min</span>
-                    </h2>
-                </div>
+            <div class="stats-gradient-card stats-card-green">
+                <i class="bi bi-clock"></i>
+                <h5>Avg Prep Time</h5>
+                <h2 class="fw-bold mb-0" id="avgPrepTimeDisplay">0</h2>
+                <small class="opacity-75">minutes</small>
             </div>
         </div>
     </div>
 
-    <!-- Meals Table -->
+    <!-- Meals Table Card -->
     <div class="card shadow-lg border-0 meal-card">
         <div class="card-header bg-white py-4">
             <div class="row align-items-center">
@@ -91,24 +81,12 @@
 
                         <!-- Filter Buttons -->
                         <div class="btn-group" id="filterButtons">
-                            <button class="btn btn-primary active" data-filter="all">
-                                All
-                            </button>
-                            <button class="btn btn-outline-primary" data-filter="BREAKFAST">
-                                Breakfast
-                            </button>
-                            <button class="btn btn-outline-primary" data-filter="SNACK">
-                                Snack
-                            </button>
-                            <button class="btn btn-outline-primary" data-filter="LUNCH">
-                                Lunch
-                            </button>
-                            <button class="btn btn-outline-primary" data-filter="DINNER">
-                                Dinner
-                            </button>
-                            <button class="btn btn-outline-primary" data-filter="DESSERT">
-                                Dessert
-                            </button>
+                            <button class="btn btn-primary active" data-filter="all">All</button>
+                            <button class="btn btn-outline-primary" data-filter="BREAKFAST">Breakfast</button>
+                            <button class="btn btn-outline-primary" data-filter="SNACK">Snack</button>
+                            <button class="btn btn-outline-primary" data-filter="LUNCH">Lunch</button>
+                            <button class="btn btn-outline-primary" data-filter="DINNER">Dinner</button>
+                            <button class="btn btn-outline-primary" data-filter="DESSERT">Dessert</button>
                         </div>
                     </div>
                 </div>
@@ -133,7 +111,7 @@
                         class="border-bottom meal-row"
                         th:attr="data-meal-type=${meal.mealType.name()}"
                         th:data-meal-uuid="${meal.uuid}"
-                        th:data-view-url="@{/mealplanner/meal/{uuid}(uuid=${meal.uuid})}">
+                        th:data-view-url="@{/mealplanner/meal/view/{uuid}(uuid=${meal.uuid})}">
                         <td class="ps-4">
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
@@ -152,7 +130,6 @@
                                 <span th:case="'DINNER'" class="badge fs-6 px-3 py-2 bg-danger">DINNER</span>
                                 <span th:case="'SNACK'" class="badge fs-6 px-3 py-2 bg-info">SNACK</span>
                                 <span th:case="'DESSERT'" class="badge fs-6 px-3 py-2 bg-warning text-dark">DESSERT</span>
-                                <span th:case="*" class="badge fs-6 px-3 py-2 bg-secondary" th:text="${meal.mealType}"></span>
                             </div>
                         </td>
                         <td><p class="mb-0" th:text="${meal.ingredients}"></p></td>
@@ -163,16 +140,13 @@
                                 <span th:text="${meal.prepTime} + ' min'"></span>
                             </span>
                         </td>
-
                         <td class="pe-4 actions-column">
                             <div class="meal-actions">
                                 <!-- Edit Button -->
                                 <a th:href="@{/mealplanner/meal/edit/{uuid}(uuid=${meal.uuid})}"
-                                   class="btn btn-outline-primary btn-sm"
-                                   title="Edit Meal">
+                                   class="btn btn-outline-primary btn-sm" title="Edit Meal">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-
                                 <!-- Delete Button -->
                                 <form th:action="@{/mealplanner/meal/delete/{uuid}(uuid=${meal.uuid})}"
                                       method="post"
@@ -196,8 +170,7 @@
                 <ul class="pagination justify-content-center mb-0">
                     <!-- Previous Page -->
                     <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                        <a class="page-link"
-                           th:href="@{/mealplanner/meal/list(page=${currentPage - 1}, size=5)}"
+                        <a class="page-link" th:href="@{/mealplanner/meal/list(page=${currentPage - 1}, size=5)}"
                            th:if="${currentPage > 0}">
                             <i class="bi bi-chevron-left"></i> Previous
                         </a>
@@ -205,20 +178,15 @@
                             <i class="bi bi-chevron-left"></i> Previous
                         </span>
                     </li>
-
                     <!-- Page Numbers -->
                     <li th:each="page : ${#numbers.sequence(0, mealsPage.totalPages - 1)}"
-                        class="page-item"
-                        th:classappend="${page == currentPage} ? 'active'">
-                        <a class="page-link"
-                           th:href="@{/mealplanner/meal/list(page=${page}, size=5)}"
+                        class="page-item" th:classappend="${page == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{/mealplanner/meal/list(page=${page}, size=5)}"
                            th:text="${page + 1}">1</a>
                     </li>
-
                     <!-- Next Page -->
                     <li class="page-item" th:classappend="${currentPage >= mealsPage.totalPages - 1} ? 'disabled'">
-                        <a class="page-link"
-                           th:href="@{/mealplanner/meal/list(page=${currentPage + 1}, size=5)}"
+                        <a class="page-link" th:href="@{/mealplanner/meal/list(page=${currentPage + 1}, size=5)}"
                            th:if="${currentPage < mealsPage.totalPages - 1}">
                             Next <i class="bi bi-chevron-right"></i>
                         </a>
@@ -228,7 +196,6 @@
                     </li>
                 </ul>
             </nav>
-
             <!-- Page Info -->
             <div class="text-center text-muted mt-2">
                 Showing <span th:text="${mealsPage.numberOfElements}">0</span> of
