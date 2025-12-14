@@ -16,6 +16,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -159,6 +161,37 @@ public class MealController {
         return "meal-list";
     }
 
+    @GetMapping("/list/favorites")
+    public String getPaginatedFavoriteMeals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String mealType,
+            Model model) {
+
+        Page<MealReadOnlyDTO> favoritesPage;
+
+        if (mealType != null && !mealType.isEmpty() && !mealType.equals("all")) {
+            favoritesPage = mealService.getPaginatedFavoriteMealsByType(
+                    MealType.valueOf(mealType), page, size);
+        } else {
+            favoritesPage = mealService.getPaginatedFavoriteMeals(page, size);
+        }
+
+        if (favoritesPage == null) {
+            Pageable pageable = PageRequest.of(page, size);
+            favoritesPage = Page.empty(pageable);
+        }
+
+        long favoritesCount = mealService.getFavoriteMealsCount();
+
+        model.addAttribute("mealsPage", favoritesPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("selectedMealType", mealType != null ? mealType : "all");
+        model.addAttribute("favoritesCount", favoritesCount);
+
+        return "meal-favorites";
+    }
+
     @GetMapping("/view/{uuid}")
     public String viewMeal(@PathVariable String uuid, Model model) {
         try {
@@ -170,8 +203,25 @@ public class MealController {
         }
     }
 
-    @GetMapping("/favorites")
-    public String viewFavoriteList() {
-        return "meal-favorites";
+//    @GetMapping("/favorites")
+//    public String viewFavoriteList() {
+//        return "meal-favorites";
+//    }
+
+    @PostMapping("/toggle-favorite/{uuid}")
+    public String toggleFavorite(@PathVariable String uuid,
+                                 @RequestParam(required = false) String redirect) throws EntityNotFoundException {
+        Meal savedMeal;
+
+            Meal meal = mealRepository.findByUuid(uuid)
+                    .orElseThrow(() -> new EntityNotFoundException("Meal", "Meal not found with UUID: " + uuid));
+
+            meal.setFavorite(!meal.isFavorite());
+            savedMeal =  mealRepository.save(meal);
+
+        if (redirect != null && redirect.equals("favorites")) {
+            return "redirect:/mealplanner/meal/list/favorites";
+        }
+        return "redirect:/mealplanner/meal/list";
     }
 }
