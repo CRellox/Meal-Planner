@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -19,4 +20,11 @@ public interface MealRepository extends JpaRepository<Meal, Long>, JpaSpecificat
     Optional<Meal> findByName(String name);
     List<Meal> findByMealType(MealType mealType);
     Page<Meal> findByMealType(MealType mealType, Pageable pageable);
+    Page<Meal> findByFavoriteTrue(Pageable pageable);
+    Page<Meal> findByFavoriteTrueAndMealType(MealType mealType, Pageable pageable);
+
+    @Query("SELECT COUNT(m) FROM Meal m WHERE m.favorite = true")
+    long countFavorites();
+
+//    long countByFavoriteTrue();
 }
