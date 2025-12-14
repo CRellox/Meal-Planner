@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -105,12 +106,42 @@ public class MealService implements IMealService {
     }
 
     @Override
+    public long getFavoriteMealsCount() {
+        return mealRepository.countFavorites();
+    }
+
+    @Override
     public Page<MealReadOnlyDTO> getPaginatedMealsByType(MealType mealType, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Meal> meals = mealRepository.findByMealType(mealType, pageable);
         log.debug("Get paginated meals by type {} were returned successfully with page={} and size={}",
                 mealType, page, size);
         return meals.map(mapper::mapToMealReadOnlyDTO);
+    }
+
+    @Override
+    public Page<MealReadOnlyDTO> getPaginatedFavoriteMeals(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+
+        Page<Meal> favoriteMealPage = mealRepository.findByFavoriteTrue(pageable);
+
+        log.debug("Get favorite paginated meals were returned successfully with page={} and size={}", page, size);
+
+        if (favoriteMealPage == null) {
+            log.warn("No favorite meals found.");
+            return Page.empty(pageable);
+        }
+
+        return favoriteMealPage.map(mapper::mapToMealReadOnlyDTO);
+    }
+
+    @Override
+    public Page<MealReadOnlyDTO> getPaginatedFavoriteMealsByType(MealType mealType, int page, int size) {
+       Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+       Page<Meal>  favoriteMealPage = mealRepository.findByFavoriteTrueAndMealType(mealType, pageable);
+        log.debug("Get favorite paginated meals by type {} were returned successfully with page={} and size={}",
+                mealType, page, size);
+        return  favoriteMealPage.map(mapper::mapToMealReadOnlyDTO);
     }
 
     @Override
@@ -129,5 +160,12 @@ public class MealService implements IMealService {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    @Override
+    public void toggleFavoriteMeal(String uuid) throws EntityNotFoundException {
+        Meal meal = getMealByUuid(uuid);
+        meal.setFavorite(!meal.isFavorite());
+        mealRepository.save(meal);
     }
 }

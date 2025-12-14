@@ -17,9 +17,17 @@ public interface IMealService {
 
     void deleteMealByUUID(String uuid) throws EntityNotFoundException;
 
+    Meal getMealByUuid(String uuid) throws  EntityNotFoundException;
+
+    long getFavoriteMealsCount();
+
+    void toggleFavoriteMeal(String uuid) throws EntityNotFoundException;
+
     Page<MealReadOnlyDTO> getPaginatedMeals(int page, int size);
 
     Page<MealReadOnlyDTO> getPaginatedMealsByType(MealType mealType, int page, int size);
 
-    Meal getMealByUuid(String uuid) throws  EntityNotFoundException;
+    Page<MealReadOnlyDTO> getPaginatedFavoriteMeals(int page, int size);
+
+    Page<MealReadOnlyDTO> getPaginatedFavoriteMealsByType(MealType mealType, int page, int size);
 }
