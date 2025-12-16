@@ -1,6 +1,7 @@
 package com.example.Meal_Planner.service;
 
 import com.example.Meal_Planner.core.exceptions.EntityAlreadyExistsException;
+import com.example.Meal_Planner.core.exceptions.EntityNotFoundException;
 import com.example.Meal_Planner.dto.UserInsertDTO;
 import com.example.Meal_Planner.mapper.Mapper;
 import com.example.Meal_Planner.model.User;
@@ -8,13 +9,15 @@ import com.example.Meal_Planner.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserService implements IUserService {
+public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Mapper mapper;
@@ -43,5 +46,21 @@ public class UserService implements IUserService {
             log.error("Registration failed: {}", e.getMessage(), e);
             throw e;
         }
+    }
+
+    @Override
+    @Transactional
+    public User findByUsername(String username) throws EntityNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "User", "User with username: " + username + " not found"));
+    }
+
+    public User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

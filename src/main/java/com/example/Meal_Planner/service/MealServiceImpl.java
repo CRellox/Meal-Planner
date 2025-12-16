@@ -8,7 +8,9 @@ import com.example.Meal_Planner.dto.MealInsertDTO;
 import com.example.Meal_Planner.dto.MealReadOnlyDTO;
 import com.example.Meal_Planner.mapper.Mapper;
 import com.example.Meal_Planner.model.Meal;
+import com.example.Meal_Planner.model.User;
 import com.example.Meal_Planner.repository.MealRepository;
+import com.example.Meal_Planner.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,25 +24,30 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MealService implements IMealService {
+public class MealServiceImpl implements IMealService {
 
     private final MealRepository mealRepository;
+    private final UserServiceImpl userServiceImpl;
+    private final UserRepository  userRepository;
     private final Mapper mapper;
 
     @Override
     @Transactional(rollbackOn = {EntityAlreadyExistsException.class})
-    public Meal saveMeal(MealInsertDTO dto) throws EntityAlreadyExistsException {
+    public Meal saveMeal(MealInsertDTO dto, User user) throws EntityAlreadyExistsException {
         try {
-            if (dto.getName() != null && mealRepository.findByName(dto.getName()).isPresent()) {
-                throw new EntityAlreadyExistsException
-                        ("Meal", "This Meal name " + dto.getName() + " already exists");
+            User managedUser = userRepository.findById(user.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+            if (dto.getName() != null && mealRepository.findByNameAndUser(dto.getName(), managedUser).isPresent()) {
+                throw new EntityAlreadyExistsException(
+                        "Meal", "This Meal name " + dto.getName() + " already exists");
             }
 
             Meal meal = mapper.mapToMealEntity(dto);
-            mealRepository.save(meal);
+            meal.setUser(managedUser);
 
             log.info("Meal with name={} saved.", dto.getName());
-            return meal;
+            return mealRepository.save(meal);
         } catch (EntityAlreadyExistsException e) {
             log.error("Save failed for Meal with name={}. Meal already exists", dto.getName(), e);
             throw e;
@@ -49,13 +56,14 @@ public class MealService implements IMealService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void updateMeal(MealEditDTO dto) throws EntityAlreadyExistsException, EntityNotFoundException {
+    public void updateMeal(MealEditDTO dto, User user) throws EntityAlreadyExistsException, EntityNotFoundException {
         try {
-            Meal meal = mealRepository.findByUuid(dto.getUuid())
-                    .orElseThrow(() -> new EntityNotFoundException("Meal", "Meal not found"));
+            Meal meal = mealRepository.findByUuidAndUser(dto.getUuid(), user)
+                    .orElseThrow(() ->
+                            new EntityNotFoundException("Meal", "Meal not found"));
 
             if (!meal.getName().equals(dto.getName())) {
-                if (mealRepository.findByName(dto.getName()).isPresent()) {
+                if (mealRepository.findByNameAndUser(dto.getName(), user).isPresent()) {
                     throw new EntityAlreadyExistsException
                             ("Meal", "Meal with this name: " + dto.getName() + " already exists");
                 }
@@ -83,12 +91,12 @@ public class MealService implements IMealService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void deleteMealByUUID(String uuid) throws EntityNotFoundException {
+    public void deleteMealByUUID(String uuid, User user) throws EntityNotFoundException {
         try {
-            Meal meal = mealRepository.findByUuid(uuid)
+            Meal meal = mealRepository.findByUuidAndUser(uuid, user)
                     .orElseThrow(() -> new EntityNotFoundException ("Meal", "Meal with uuid: " + uuid + " not found"));
 
-            mealRepository.deleteById(meal.getId());
+            mealRepository.delete(meal);
 
             log.info("Meal with uuid={} deleted.", uuid);
         } catch (EntityNotFoundException e) {
@@ -100,22 +108,32 @@ public class MealService implements IMealService {
     @Override
     public Page<MealReadOnlyDTO> getPaginatedMeals(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Meal> meals = mealRepository.findAll(pageable);
-        log.debug("Get paginated meals were returned successfully with page={} and size={}", page, size);
+
+        User user = userServiceImpl.getCurrentUser();
+
+        Page<Meal> meals = mealRepository.findAllByUser(user, pageable);
+
+        log.debug("Get paginated meals for user={} page={} size={}", user.getUsername(), page, size);
         return meals.map(mapper::mapToMealReadOnlyDTO);
     }
 
     @Override
     public long getFavoriteMealsCount() {
+        User user = userServiceImpl.getCurrentUser();
         return mealRepository.countFavorites();
     }
 
     @Override
     public Page<MealReadOnlyDTO> getPaginatedMealsByType(MealType mealType, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Meal> meals = mealRepository.findByMealType(mealType, pageable);
-        log.debug("Get paginated meals by type {} were returned successfully with page={} and size={}",
-                mealType, page, size);
+
+        User user = userServiceImpl.getCurrentUser();
+
+        Page<Meal> meals = mealRepository.findByUserAndMealType(user, mealType, pageable);
+
+        log.debug("Get paginated meals by type {} for user={} page={} size={}",
+                mealType, user.getUsername(), page, size);
+
         return meals.map(mapper::mapToMealReadOnlyDTO);
     }
 
@@ -123,9 +141,11 @@ public class MealService implements IMealService {
     public Page<MealReadOnlyDTO> getPaginatedFavoriteMeals(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
 
-        Page<Meal> favoriteMealPage = mealRepository.findByFavoriteTrue(pageable);
+        User user = userServiceImpl.getCurrentUser();
 
-        log.debug("Get favorite paginated meals were returned successfully with page={} and size={}", page, size);
+        Page<Meal> favoriteMealPage = mealRepository.findByUserAndFavoriteTrue(user, pageable);
+
+        log.debug("Get favorite paginated meals for user={} page={} size={}", user.getUsername(), page, size);
 
         if (favoriteMealPage == null) {
             log.warn("No favorite meals found.");
@@ -137,22 +157,31 @@ public class MealService implements IMealService {
 
     @Override
     public Page<MealReadOnlyDTO> getPaginatedFavoriteMealsByType(MealType mealType, int page, int size) {
+
        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
-       Page<Meal>  favoriteMealPage = mealRepository.findByFavoriteTrueAndMealType(mealType, pageable);
-        log.debug("Get favorite paginated meals by type {} were returned successfully with page={} and size={}",
-                mealType, page, size);
+
+        User user = userServiceImpl.getCurrentUser();
+
+        Page<Meal> favoriteMealPage =
+                mealRepository.findByUserAndFavoriteTrueAndMealType(
+                        user, mealType, pageable);
+
+        log.debug("Get favorite paginated meals by type {} for user={} page={} size={}",
+                mealType, user.getUsername(), page, size);
         return  favoriteMealPage.map(mapper::mapToMealReadOnlyDTO);
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Meal getMealByUuid(String uuid) throws EntityNotFoundException {
+    public Meal getMealByUuid(String uuid, User user) throws EntityNotFoundException {
         try {
-            Meal meal = mealRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new EntityNotFoundException ("Meal", "Meal with uuid: " + uuid + " not found"));
+            if (user == null || user.getId() == null) {
+                throw new IllegalArgumentException("User must be persisted before fetching a meal.");
+            }
 
-            log.info("Meal with uuid={} was successfully retrieved", uuid);
-            return meal;
+            return mealRepository.findByUuidAndUser(uuid, user)
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Meal", "Meal with uuid: " + uuid + " not found"));
 
         } catch (EntityNotFoundException e) {
             log.error("Failed retrieving meal with uuid={}. Entity not found.", uuid, e);
@@ -163,8 +192,8 @@ public class MealService implements IMealService {
     }
 
     @Override
-    public void toggleFavoriteMeal(String uuid) throws EntityNotFoundException {
-        Meal meal = getMealByUuid(uuid);
+    public void toggleFavoriteMeal(String uuid, User user) throws EntityNotFoundException {
+        Meal meal = getMealByUuid(uuid, user);
         meal.setFavorite(!meal.isFavorite());
         mealRepository.save(meal);
     }

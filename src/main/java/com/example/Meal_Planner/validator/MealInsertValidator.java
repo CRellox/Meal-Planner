@@ -1,6 +1,8 @@
 package com.example.Meal_Planner.validator;
 
 import com.example.Meal_Planner.dto.MealInsertDTO;
+import com.example.Meal_Planner.model.Meal;
+import com.example.Meal_Planner.model.User;
 import com.example.Meal_Planner.repository.MealRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,25 +11,30 @@ import org.springframework.lang.NonNull;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.Optional;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class MealInsertValidator implements Validator {
+public class MealInsertValidator {
 
     private final MealRepository mealRepository;
 
-    @Override
-    public boolean supports(@NonNull Class<?> clazz) {
-        return MealInsertDTO.class == clazz;
-    }
+    public void validate(MealInsertDTO dto, Errors errors, User user) {
 
-    @Override
-    public void validate(@NonNull Object target, @NonNull Errors errors) {
-        MealInsertDTO mealInsertDTO =(MealInsertDTO) target;
+        if (dto.getName() == null || dto.getName().isBlank()) {
+            return;
+        }
 
-        if (mealInsertDTO.getName() !=null && mealRepository.findByName(mealInsertDTO.getName()).isPresent()) {
-            log.error("Save failed for meal with name={}. Meal already exists.", mealInsertDTO.getName());
-            errors.rejectValue("name", "name.meal.exists");
+        Optional<Meal> existingMeal = mealRepository.findByNameAndUser(dto.getName(), user);
+
+        if (existingMeal.isPresent()) {
+            log.error(
+                    "Meal name={} already exists for user={}",
+                    dto.getName(),
+                    user.getUsername()
+            );
+            errors.rejectValue("name", "meal.name.exists");
         }
     }
 }

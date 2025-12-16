@@ -20,7 +20,7 @@ public class Meal extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false, updatable = false, unique = true)
     private String uuid;
 
     @Enumerated(EnumType.STRING)
@@ -36,9 +36,12 @@ public class Meal extends AbstractEntity {
 
     private boolean favorite = false;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @PrePersist
     public void initializeUUID() {
         if (uuid == null) uuid = UUID.randomUUID().toString();
     }
 }
-

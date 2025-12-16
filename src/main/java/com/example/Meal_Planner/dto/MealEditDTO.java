@@ -1,6 +1,7 @@
 package com.example.Meal_Planner.dto;
 
 import com.example.Meal_Planner.core.enums.MealType;
+import com.example.Meal_Planner.model.User;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -39,4 +40,6 @@ public class MealEditDTO {
     private String instructions;
 
     private boolean favorite;
+
+    private User user;
 }

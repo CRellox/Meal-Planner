@@ -12,19 +12,42 @@ import org.springframework.stereotype.Component;
 public class Mapper {
 
     public Meal mapToMealEntity(MealInsertDTO dto) {
-        return new Meal(null, null, dto.getMealType(), dto.getName(),
-                dto.getIngredients(), dto.getPrepTime(), dto.getInstructions(), dto.isFavorite());
+        Meal meal = new Meal();
+
+        meal.setMealType(dto.getMealType());
+        meal.setName(dto.getName());
+        meal.setIngredients(dto.getIngredients());
+        meal.setPrepTime(dto.getPrepTime());
+        meal.setInstructions(dto.getInstructions());
+        meal.setFavorite(dto.isFavorite());
+
+        return meal;
     }
 
     public MealReadOnlyDTO mapToMealReadOnlyDTO(Meal meal) {
-        return new MealReadOnlyDTO(meal.getName(), meal.getIngredients(), meal.getPrepTime(),
-                meal.getInstructions(), meal.getUuid(), meal.getId(), meal.getMealType(),
-                meal.getCreatedAt(), meal.getUpdatedAt(), meal.isFavorite());
+        return new MealReadOnlyDTO(
+                meal.getName(),
+                meal.getIngredients(),
+                meal.getPrepTime(),
+                meal.getInstructions(),
+                meal.getUuid(),
+                meal.getId(),
+                meal.getMealType(),
+                meal.getCreatedAt(),
+                meal.getUpdatedAt(),
+                meal.isFavorite());
     }
 
     public MealEditDTO mapToMealEditDTO(Meal meal) {
-        return new MealEditDTO(meal.getUuid(), meal.getMealType(), meal.getName(), meal.getIngredients(),
-                meal.getPrepTime(), meal.getInstructions(), meal.isFavorite());
+        return new MealEditDTO(
+                meal.getUuid(),
+                meal.getMealType(),
+                meal.getName(),
+                meal.getIngredients(),
+                meal.getPrepTime(),
+                meal.getInstructions(),
+                meal.isFavorite(),
+                meal.getUser());
     }
 
     public User mapToUserEntity(UserInsertDTO userInsertDTO) {

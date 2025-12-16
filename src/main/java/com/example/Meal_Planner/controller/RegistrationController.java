@@ -3,7 +3,7 @@ package com.example.Meal_Planner.controller;
 import com.example.Meal_Planner.core.exceptions.EntityAlreadyExistsException;
 import com.example.Meal_Planner.dto.UserInsertDTO;
 import com.example.Meal_Planner.repository.UserRepository;
-import com.example.Meal_Planner.service.UserService;
+import com.example.Meal_Planner.service.UserServiceImpl;
 import com.example.Meal_Planner.validator.UserInsertValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class RegistrationController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final UserInsertValidator userInsertValidator;
     private final UserRepository userRepository;
 
