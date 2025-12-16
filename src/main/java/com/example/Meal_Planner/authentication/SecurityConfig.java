@@ -26,14 +26,18 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/mealplanner/register",
-                                "/html/**" ,"/css/**", "/js/**", "/images/**").permitAll()
-                        .anyRequest().authenticated()
+                                "/html/**" ,"/css/**", "/js/**", "/images/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/mealplanner/meal/main-menu", false)
                         .permitAll()
-                )
+                ).rememberMe(remember -> remember
+                        .key("uniqueAndSecretKey")
+                        .tokenValiditySeconds(7 * 24 * 60 * 60))
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")
                         .invalidateHttpSession(true)
